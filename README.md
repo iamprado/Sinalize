@@ -86,11 +86,3 @@ npm start
 ### Thiago Prado
 
 [![GitHub](https://img.shields.io/badge/@Thiago--Prado--Da--Silva-050A24?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Thiago-Prado-Da-Silva)
-
----
-
-<div align="center">
-
-Projeto baseado na implementação de referência **web-data-viz** da SPTech.
-
-</div>
