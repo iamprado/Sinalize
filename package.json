@@ -1,13 +1,13 @@
 {
-  "name": "web-data-viz",
+  "name": "sinalize",
   "version": "1.0.0",
-  "description": "",
+  "description": "Projeto Individual SPTech – Libras na minha vida",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon --exec node app.js"
   },
-  "author": "Feito pelos desenvolvedores @ São Paulo Tech School / Bandtec Digital School",
+  "author": "Thiago Prado – baseado no web-data-viz (São Paulo Tech School / Bandtec Digital School)",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
