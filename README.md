@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="public/assets/imgs/Sinalize-Banner.png" alt="banner do Sinalize" width="100%">
+<img src="public/assets/imgs/Sinalize-Banner.png" alt="banner do Sinalize" width="50%">
 
 **Libras na minha vida**
 
