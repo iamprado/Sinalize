@@ -4,14 +4,14 @@
 
 **Libras na minha vida**
 
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-2563EB?style=for-the-badge&labelColor=050A24)
-![SPTech](https://img.shields.io/badge/SPTech-projeto%20individual-2563EB?style=for-the-badge&labelColor=050A24)
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento-2563EB?style=for-the-badge&labelColor=3D4A6B)
+![SPTech](https://img.shields.io/badge/SPTech-projeto%20individual-2563EB?style=for-the-badge&labelColor=3D4A6B)
 
-![HTML5](https://img.shields.io/badge/HTML5-050A24?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-050A24?style=for-the-badge&logo=css&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-050A24?style=for-the-badge&logo=javascript&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-050A24?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-050A24?style=for-the-badge&logo=mysql&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-1D5BF0?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1D5BF0?style=for-the-badge&logo=css&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-1D5BF0?style=for-the-badge&logo=javascript&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-1D5BF0?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-1D5BF0?style=for-the-badge&logo=mysql&logoColor=white)
 
 **[Sobre](#-sobre)** · **[Funcionalidades](#-funcionalidades)** · **[Tecnologias](#-tecnologias)** · **[Como rodar](#-como-rodar)** · **[Autor](#-autor)**
 
@@ -55,7 +55,7 @@ O **Sinalize** é um site sobre a **Libras (Língua Brasileira de Sinais)** e so
 1. Clone este repositório:
 
 ```
-git clone https://github.com/Thiago-Prado-Da-Silva/Sinalize.git
+git clone https://github.com/iamprado/Sinalize.git
 ```
 
 2. Crie as tabelas no banco de dados executando o script **/src/database/script-tabelas.sql**.
@@ -79,10 +79,10 @@ npm start
 
 ## 👤 Autor
 
-<a href="https://github.com/Thiago-Prado-Da-Silva">
-  <img src="https://github.com/Thiago-Prado-Da-Silva.png" width="100" alt="Foto de perfil de Thiago Prado">
+<a href="https://github.com/iamprado">
+  <img src="https://github.com/iamprado.png" width="100" alt="Foto de perfil de Thiago Prado">
 </a>
 
 ### Thiago Prado
 
-[![GitHub](https://img.shields.io/badge/@Thiago--Prado--Da--Silva-050A24?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Thiago-Prado-Da-Silva)
+[![GitHub](https://img.shields.io/badge/@iamprado-1D5BF0?style=for-the-badge&logo=github&logoColor=white)](https://github.com/iamprado)
