@@ -354,7 +354,7 @@ body {
   background-color: var(--gelo);
 }
 
-/* CADASTRO */
+/* CADASTRO E LOGIN (as duas páginas usam o mesmo layout) */
 
 .cadastro .container {
   flex-wrap: wrap;

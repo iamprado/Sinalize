@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -16,95 +16,106 @@
 </head>
 
 <body>
-
-    <!--Header-->
-
     <div class="header">
         <div class="container">
-            <h1 class="titulo">Sinalize</h1>
+            <a class="marca" href="index.html">
+                <img src="assets/imgs/sinalize-mao.png" alt="Mão fazendo a letra S em Libras">
+                <h1 class="titulo">Sinalize</h1>
+            </a>
             <ul class="navbar">
                 <li>
-                    <a href="index.html">Inicial</a>
+                    <a href="index.html">Início</a>
                 </li>
                 <li>
-                    <a href="simulador.html">Simulador</a>
+                    <a href="index.html#historia">Minha história</a>
                 </li>
-                <li>|</li>
                 <li class="agora">
-                    <a href="#">Login</a>
+                    <a href="login.html">Login</a>
                 </li>
                 <li>
-                    <a href="cadastro.html">Cadastro</a>
+                    <a class="botao-menu" href="cadastro.html">Cadastro</a>
                 </li>
             </ul>
         </div>
     </div>
 
-
-    <div class="login">
-        <div class="alerta_erro">
-            <div class="card_erro" id="cardErro">
-                <span id="mensagem_erro"></span>
-            </div>
-        </div>
+    <!-- Usa o mesmo layout do cadastro: painel marinho + cartão branco -->
+    <div class="cadastro">
         <div class="container">
-            <div class="card card-login">
-                <h2>Olá de volta!</h2>
-                <div class="formulario">
-                    <div class="campo">
-                        <span>E-mail:</span>
-                        <input id="email_input" type="text" placeholder="Login">
-                    </div>
-                    <div class="campo">
-                        <span>Senha:</span>
-                        <input id="senha_input" type="password" placeholder="******">
-                    </div>
-                    <button class="botao" onclick="entrar()">Entrar</button>
-                </div>
 
-                <div id="div_aguardar" class="loading-div">
-                    <img src="./assets/circle-loading.gif" id="loading-gif">
-                </div>
-
-                <div id="div_erros_login"></div>
+            <div class="convite">
+                <p class="chamada">Bem-vindo de volta</p>
+                <h2>Continue praticando <span>Libras</span>.</h2>
+                <p>Entre na sua conta para responder o quiz e ver a sua evolução no dashboard.</p>
+                <img class="convite-mao" src="assets/imgs/sinalize-mao.png" alt="">
             </div>
+
+            <div class="cartao">
+                <div>
+                    <h2>Login</h2>
+                    <p class="cartao-sub">Use o e-mail e a senha do seu cadastro.</p>
+                </div>
+
+                <div class="campo-cadastro">
+                    <label for="ipt_email">E-mail</label>
+                    <input id="ipt_email" type="text" placeholder="voce@email.com">
+                    <span class="msg-erro" id="erro_email"></span>
+                </div>
+
+                <div class="campo-cadastro">
+                    <label for="ipt_senha">Senha</label>
+                    <input id="ipt_senha" type="password" placeholder="Sua senha">
+                    <span class="msg-erro" id="erro_senha"></span>
+                </div>
+
+                <div class="resultado" id="div_resultado"></div>
+
+                <button class="botao-redondo botao-cheio" onclick="entrar()">Entrar</button>
+
+                <p class="cartao-rodape">Ainda não tem conta? <a href="cadastro.html">Cadastre-se</a></p>
+            </div>
+
         </div>
     </div>
 
-    <!--footer inicio-->
     <div class="footer">
         <div class="container">
             <h4>Sinalize &middot; Thiago Prado &middot; SPTech &copy; 2026</h4>
         </div>
     </div>
-    <!--footer fim-->
-
 </body>
 
 </html>
 
 <script>
-
-
     function entrar() {
-        aguardar();
+        // 1. Pega o que foi digitado
+        var emailVar = ipt_email.value.trim();
+        var senhaVar = ipt_senha.value;
 
-        var emailVar = email_input.value;
-        var senhaVar = senha_input.value;
+        // 2. Limpa as mensagens da tentativa anterior
+        erro_email.innerHTML = "";
+        erro_senha.innerHTML = "";
+        div_resultado.style.display = "none";
 
-        if (emailVar == "" || senhaVar == "") {
-            cardErro.style.display = "block"
-            mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
-            finalizarAguardar();
+        // 3. Valida os campos antes de chamar a API
+        var valido = true;
+
+        if (emailVar.indexOf("@") < 1) {
+            erro_email.innerHTML = "Digite um e-mail válido.";
+            valido = false;
+        }
+
+        if (senhaVar == "") {
+            erro_senha.innerHTML = "Digite sua senha.";
+            valido = false;
+        }
+
+        if (valido == false) {
             return false;
         }
-        else {
-            setInterval(sumirMensagem, 5000)
-        }
 
-        console.log("FORM LOGIN: ", emailVar);
-        console.log("FORM SENHA: ", senhaVar);
-
+        // 4. Envia para a API (routes/usuarios.js -> usuarioController.autenticar -> usuarioModel)
         fetch("/usuarios/autenticar", {
             method: "POST",
             headers: {
@@ -115,44 +126,42 @@
                 senhaServer: senhaVar
             })
         }).then(function (resposta) {
-            console.log("ESTOU NO THEN DO entrar()!")
 
             if (resposta.ok) {
-                console.log(resposta);
-
-                resposta.json().then(json => {
+                resposta.json().then(function (json) {
                     console.log(json);
-                    console.log(JSON.stringify(json));
-                    sessionStorage.EMAIL_USUARIO = json.email;
-                    sessionStorage.NOME_USUARIO = json.nome;
+
+                    // 5. Guarda os dados do usuário na sessão do navegador
+                    //    (o quiz e o dashboard usam o ID_USUARIO para salvar e buscar as tentativas)
                     sessionStorage.ID_USUARIO = json.id;
-                    sessionStorage.AQUARIOS = JSON.stringify(json.aquarios)
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.NIVEL_USUARIO = json.nivel;
 
+                    mostrarResultado("Olá, " + json.nome + "! Entrando...", "certo");
+
+                    // Enquanto o quiz não existe, volta para a Home. Depois: window.location = "quiz.html";
                     setTimeout(function () {
-                        window.location = "./dashboard/cards.html";
-                    }, 1000); // apenas para exibir o loading
-
+                        window.location = "index.html";
+                    }, 1500);
                 });
-
             } else {
-
-                console.log("Houve um erro ao tentar realizar o login!");
-
-                resposta.text().then(texto => {
-                    console.error(texto);
-                    finalizarAguardar(texto);
-                });
+                // 403 = e-mail ou senha errados (resposta do usuarioController)
+                mostrarResultado("E-mail ou senha incorretos.", "erro");
             }
 
         }).catch(function (erro) {
             console.log(erro);
-        })
+            mostrarResultado("Não foi possível entrar agora. Tente de novo em instantes.", "erro");
+        });
 
         return false;
     }
 
-    function sumirMensagem() {
-        cardErro.style.display = "none"
+    // Mostra a caixa verde (certo) ou vermelha (erro) acima do botão
+    function mostrarResultado(mensagem, tipo) {
+        div_resultado.innerHTML = mensagem;
+        div_resultado.className = "resultado " + tipo;
+        div_resultado.style.display = "block";
     }
-
 </script>
