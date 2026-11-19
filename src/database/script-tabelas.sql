@@ -17,13 +17,14 @@ CREATE TABLE empresa (
 	codigo_ativacao VARCHAR(50)
 );
 
+-- nivel_libras guarda a resposta do cadastro: nunca, basico, intermediario ou fluente
 CREATE TABLE usuario (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-	nome VARCHAR(50),
-	email VARCHAR(50),
-	senha VARCHAR(50),
-	fk_empresa INT,
-	FOREIGN KEY (fk_empresa) REFERENCES empresa(id)
+	nome VARCHAR(50) NOT NULL,
+	email VARCHAR(80) NOT NULL UNIQUE,
+	senha VARCHAR(50) NOT NULL,
+	nivel_libras VARCHAR(20) NOT NULL,
+	CONSTRAINT chk_nivel CHECK (nivel_libras IN ('nunca', 'basico', 'intermediario', 'fluente'))
 );
 
 CREATE TABLE aviso (

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8" />
@@ -15,197 +15,206 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 </head>
 
-<body onload="listar()">
-  <!--header inicio-->
+<body>
   <div class="header">
     <div class="container">
-      <h1 class="titulo">Sinalize</h1>
+      <a class="marca" href="index.html">
+        <img src="assets/imgs/sinalize-mao.png" alt="Mão fazendo a letra S em Libras">
+        <h1 class="titulo">Sinalize</h1>
+      </a>
       <ul class="navbar">
         <li>
-          <a href="index.html">Inicial</a>
+          <a href="index.html">Início</a>
         </li>
         <li>
-          <a href="simulador.html">Simulador</a>
+          <a href="index.html#historia">Minha história</a>
         </li>
-        <li>|</li>
         <li>
           <a href="login.html">Login</a>
         </li>
-        <li class="agora">
-          <a href="#">Cadastro</a>
+        <li>
+          <a class="botao-menu" href="cadastro.html">Cadastro</a>
         </li>
       </ul>
     </div>
   </div>
-  <!--header fim-->
 
-  <div class="login">
-    <div class="alerta_erro">
-      <div class="card_erro" id="cardErro">
-        <span id="mensagem_erro"></span>
-      </div>
-    </div>
+  <div class="cadastro">
     <div class="container">
-      <div class="card card-cadastro">
-        <h2>Bem-vindo!</h2>
-        <div class="formulario">
-          <!--
-                         Para inserir mais um campo, copie uma das inputs abaixo.
-                         Assim que inserir vá para o script abaixo.
-                     -->
-          <div class="campo">
-            <span>Código de ativação:</span>
-            <input id="codigo_input" type="text" placeholder="Insira aqui seu código" />
-          </div>
-          <div class="campo">
-            <span>Nome:</span>
-            <input id="nome_input" type="text" placeholder="Seu nome" />
-          </div>
-          <div class="campo">
-            <span>E-mail:</span>
-            <input id="email_input" type="text" placeholder="meuemail@provedor.com" />
-          </div>
-          <div class="campo">
-            <span>Senha:</span>
-            <input id="senha_input" type="password" placeholder="******" />
-          </div>
-          <div class="campo">
-            <span>Confirmação da Senha:</span>
-            <input id="confirmacao_senha_input" type="password" placeholder="******" />
-          </div>
-          <button class="botao" onclick="cadastrar()">Cadastrar</button>
-        </div>
-        <div id="div_aguardar" class="loading-div">
-          <img src="./assets/circle-loading.gif" id="loading-gif" />
+
+      <!-- Painel marinho: o que a pessoa ganha criando a conta -->
+      <div class="convite">
+        <p class="chamada">Crie sua conta</p>
+        <h2>Comece a aprender <span>Libras</span> hoje.</h2>
+        <p>Com a conta você responde o quiz e acompanha quanto já aprendeu.</p>
+        <ul class="vantagens">
+          <li><span class="numero">1</span>
+            <div><strong>Responda o quiz</strong><small>Veja um sinal e escolha o significado certo.</small></div>
+          </li>
+          <li><span class="numero">2</span>
+            <div><strong>Acompanhe sua evolução</strong><small>Seus acertos ficam salvos no dashboard.</small></div>
+          </li>
+          <li><span class="numero">3</span>
+            <div><strong>Pratique quando quiser</strong><small>Refaça o quiz e compare com a primeira tentativa.</small></div>
+          </li>
+        </ul>
+        <img class="convite-mao" src="assets/imgs/sinalize-mao.png" alt="">
+      </div>
+
+      <!-- Formulário -->
+      <div class="cartao">
+        <div>
+          <h2>Cadastro</h2>
+          <p class="cartao-sub">Leva menos de um minuto.</p>
         </div>
 
-        <div id="div_erros_login"></div>
+        <div class="campo-cadastro">
+          <label for="ipt_nome">Nome</label>
+          <input id="ipt_nome" type="text" placeholder="Como você quer ser chamado">
+          <span class="msg-erro" id="erro_nome"></span>
+        </div>
+
+        <div class="campo-cadastro">
+          <label for="ipt_email">E-mail</label>
+          <input id="ipt_email" type="text" placeholder="voce@email.com">
+          <span class="msg-erro" id="erro_email"></span>
+        </div>
+
+        <div class="linha-campos">
+          <div class="campo-cadastro">
+            <label for="ipt_senha">Senha</label>
+            <input id="ipt_senha" type="password" placeholder="Mínimo de 6 caracteres">
+            <span class="msg-erro" id="erro_senha"></span>
+          </div>
+          <div class="campo-cadastro">
+            <label for="ipt_confirmar">Confirmar senha</label>
+            <input id="ipt_confirmar" type="password" placeholder="Repita a senha">
+            <span class="msg-erro" id="erro_confirmar"></span>
+          </div>
+        </div>
+
+        <div class="campo-cadastro">
+          <label for="sel_nivel">Qual o seu contato com Libras?</label>
+          <select id="sel_nivel">
+            <option value="">Selecione</option>
+            <option value="nunca">Nunca tive contato</option>
+            <option value="basico">Sei alguns sinais</option>
+            <option value="intermediario">Consigo conversar um pouco</option>
+            <option value="fluente">Sou fluente</option>
+          </select>
+          <span class="msg-erro" id="erro_nivel"></span>
+        </div>
+
+        <div class="resultado" id="div_resultado"></div>
+
+        <button class="botao-redondo botao-cheio" onclick="cadastrar()">Criar minha conta</button>
+
+        <p class="cartao-rodape">Já tem conta? <a href="login.html">Entrar</a></p>
       </div>
+
     </div>
   </div>
 
-  <!--footer inicio-->
   <div class="footer">
     <div class="container">
       <h4>Sinalize &middot; Thiago Prado &middot; SPTech &copy; 2026</h4>
     </div>
   </div>
-  <!--footer fim-->
 </body>
 
 </html>
 
 <script>
-
-  // Array para armazenar empresas cadastradas para validação de código de ativação 
-  let listaEmpresasCadastradas = [];
-
   function cadastrar() {
-    // aguardar();
+    // 1. Pega o que foi digitado em cada campo
+    var nomeVar = ipt_nome.value.trim();
+    var emailVar = ipt_email.value.trim();
+    var senhaVar = ipt_senha.value;
+    var confirmarVar = ipt_confirmar.value;
+    var nivelVar = sel_nivel.value;
 
-    //Recupere o valor da nova input pelo nome do id
-    // Agora vá para o método fetch logo abaixo
-    var nomeVar = nome_input.value;
-    var emailVar = email_input.value;
-    var senhaVar = senha_input.value;
-    var confirmacaoSenhaVar = confirmacao_senha_input.value;
-    var codigoVar = codigo_input.value;
-    var idEmpresaVincular
+    // 2. Limpa as mensagens de erro da tentativa anterior
+    erro_nome.innerHTML = "";
+    erro_email.innerHTML = "";
+    erro_senha.innerHTML = "";
+    erro_confirmar.innerHTML = "";
+    erro_nivel.innerHTML = "";
+    div_resultado.style.display = "none";
 
-    // Verificando se há algum campo em branco
-    if (
-      nomeVar == "" ||
-      emailVar == "" ||
-      senhaVar == "" ||
-      confirmacaoSenhaVar == "" ||
-      codigoVar == ""
-    ) {
-      cardErro.style.display = "block";
-      mensagem_erro.innerHTML =
-        "(Mensagem de erro para todos os campos em branco)";
+    // 3. Valida cada campo. Se algum estiver errado, "valido" vira false
+    var valido = true;
 
-      finalizarAguardar();
+    if (nomeVar.length < 3) {
+      erro_nome.innerHTML = "Digite seu nome (mínimo de 3 letras).";
+      valido = false;
+    }
+
+    // O e-mail precisa ter um @ (que não seja o primeiro caractere) e um ponto depois dele
+    var posicaoArroba = emailVar.indexOf("@");
+    var posicaoPonto = emailVar.indexOf(".", posicaoArroba);
+    if (posicaoArroba < 1 || posicaoPonto == -1) {
+      erro_email.innerHTML = "Digite um e-mail válido, como voce@email.com.";
+      valido = false;
+    }
+
+    if (senhaVar.length < 6) {
+      erro_senha.innerHTML = "A senha precisa ter pelo menos 6 caracteres.";
+      valido = false;
+    }
+
+    if (confirmarVar != senhaVar || confirmarVar == "") {
+      erro_confirmar.innerHTML = "As senhas não são iguais.";
+      valido = false;
+    }
+
+    if (nivelVar == "") {
+      erro_nivel.innerHTML = "Escolha uma opção.";
+      valido = false;
+    }
+
+    if (valido == false) {
+      mostrarResultado("Confira os campos marcados em vermelho.", "erro");
       return false;
-    } else {
-      setInterval(sumirMensagem, 5000);
     }
 
-    // Verificando se o código de ativação é de alguma empresa cadastrada
-    for (let i = 0; i < listaEmpresasCadastradas.length; i++) {
-      if (listaEmpresasCadastradas[i].codigo_ativacao == codigoVar) {
-        idEmpresaVincular = listaEmpresasCadastradas[i].id
-        console.log("Código de ativação válido.");
-        break;
-      } else {
-        cardErro.style.display = "block";
-        mensagem_erro.innerHTML = "(Mensagem de erro para código inválido)";
-        finalizarAguardar();
-      }
-    }
-
-    // Enviando o valor da nova input
+    // 4. Tudo certo: envia para a API (routes/usuarios.js -> usuarioController -> usuarioModel)
     fetch("/usuarios/cadastrar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // crie um atributo que recebe o valor recuperado aqui
-        // Agora vá para o arquivo routes/usuario.js
         nomeServer: nomeVar,
         emailServer: emailVar,
         senhaServer: senhaVar,
-        idEmpresaVincularServer: idEmpresaVincular
+        nivelServer: nivelVar
       }),
     })
       .then(function (resposta) {
         console.log("resposta: ", resposta);
 
         if (resposta.ok) {
-          cardErro.style.display = "block";
+          mostrarResultado("Conta criada! Levando você para o login...", "certo");
 
-          mensagem_erro.innerHTML =
-            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
-
-          setTimeout(() => {
+          setTimeout(function () {
             window.location = "login.html";
-          }, "2000");
-
-          limparFormulario();
-          finalizarAguardar();
+          }, 2000);
         } else {
           throw "Houve um erro ao tentar realizar o cadastro!";
         }
       })
-      .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
-        finalizarAguardar();
+      .catch(function (erro) {
+        console.log(`#ERRO: ${erro}`);
+        mostrarResultado("Não foi possível criar a conta agora. Tente de novo em instantes.", "erro");
       });
 
     return false;
   }
 
-  // Listando empresas cadastradas 
-  function listar() {
-    fetch("/empresas/listar", {
-      method: "GET",
-    })
-      .then(function (resposta) {
-        resposta.json().then((empresas) => {
-          empresas.forEach((empresa) => {
-            listaEmpresasCadastradas.push(empresa);
-
-            console.log("listaEmpresasCadastradas")
-            console.log(listaEmpresasCadastradas[0].codigo_ativacao)
-          });
-        });
-      })
-      .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
-      });
-  }
-
-  function sumirMensagem() {
-    cardErro.style.display = "none";
+  // Mostra a caixa verde (certo) ou vermelha (erro) acima do botão
+  function mostrarResultado(mensagem, tipo) {
+    div_resultado.innerHTML = mensagem;
+    div_resultado.className = "resultado " + tipo;
+    div_resultado.style.display = "block";
   }
 </script>

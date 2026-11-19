@@ -354,6 +354,196 @@ body {
   background-color: var(--gelo);
 }
 
+/* CADASTRO */
+
+.cadastro .container {
+  flex-wrap: wrap;
+  gap: 32px;
+  padding: 48px 0;
+}
+
+/* Painel marinho à esquerda */
+.convite {
+  flex: 1 1 320px;
+  background-color: var(--marinho);
+  color: var(--branco);
+  border-radius: 20px;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.convite p {
+  margin: 0;
+  color: #D6DEF8;
+}
+
+.convite .chamada {
+  color: var(--azul-claro);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.convite h2 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.convite h2 span {
+  color: var(--azul-claro);
+}
+
+.vantagens {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.vantagens li {
+  display: flex;
+  gap: 12px;
+}
+
+/* Bolinha azul com o número do passo */
+.vantagens .numero {
+  flex: 0 0 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--azul);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vantagens strong {
+  display: block;
+}
+
+.vantagens small {
+  color: #B9C4EC;
+  font-size: 14px;
+}
+
+.convite-mao {
+  width: 120px;
+  margin-top: auto;
+  align-self: flex-end;
+}
+
+/* Cartão branco com o formulário */
+.cartao {
+  flex: 1 1 420px;
+  background-color: var(--branco);
+  border: 1px solid #D5DDF2;
+  border-radius: 20px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cartao h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--marinho);
+}
+
+.cartao-sub {
+  margin: 0;
+  color: #4C567A;
+}
+
+/* Senha e confirmar senha lado a lado */
+.linha-campos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.linha-campos .campo-cadastro {
+  flex: 1 1 180px;
+}
+
+.campo-cadastro {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo-cadastro label {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--marinho);
+}
+
+.campo-cadastro input,
+.campo-cadastro select {
+  font-family: inherit;
+  font-size: 16px;
+  text-align: left;
+  margin: 0;
+  padding: 11px 14px;
+  border: 2px solid #D5DDF2;
+  border-radius: 10px;
+  background-color: var(--branco);
+  color: var(--texto);
+}
+
+.campo-cadastro input:focus,
+.campo-cadastro select:focus {
+  outline: none;
+  border-color: var(--azul);
+}
+
+.msg-erro {
+  font-size: 13px;
+  font-weight: 600;
+  color: #C62E3B;
+}
+
+/* Caixa de resposta: escondida até o usuário clicar em "Criar minha conta" */
+.resultado {
+  display: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-weight: 600;
+}
+
+.resultado.certo {
+  background-color: #E6F6EF;
+  color: #12805C;
+}
+
+.resultado.erro {
+  background-color: #FDECEE;
+  color: #C62E3B;
+}
+
+.cartao .botao-cheio {
+  font-family: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.cartao-rodape {
+  margin: 0;
+  text-align: center;
+  color: #4C567A;
+}
+
+.cartao-rodape a {
+  color: var(--azul);
+  font-weight: 700;
+}
+
 /* FOOTER */
 
 .footer {
