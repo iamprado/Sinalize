@@ -1,13 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/* Fonte Nunito, a mesma da identidade visual do Sinalize */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Barlow', 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: black;
-}
-
+/* Cores e tamanhos usados em todo o site */
 :root {
+  --marinho: #01062B;       /* fundo da logo: header, banner e rodapé */
+  --azul: #1D5BF0;          /* cor de destaque: botões e títulos */
+  --azul-claro: #8FB4FF;    /* destaque sobre o fundo marinho */
+  --gelo: #F3F6FD;          /* fundo das seções claras */
+  --branco: #FFFFFF;
+  --texto: #131A3A;         /* texto sobre fundo claro */
+
   --tamanho-header: 80px;
   --tamanho-banner: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-simulador: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
@@ -15,49 +17,95 @@ body {
   --tamanho-footer: 65px;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+  background-color: var(--gelo);
+  color: var(--texto);
+}
+
+/* Centraliza o conteúdo de cada faixa da página */
 .container {
   display: flex;
   width: 80%;
+  max-width: 1080px;
   margin: auto;
 }
 
+/* HEADER */
+
 .header {
-  height: var(--tamanho-header);
-  border-bottom: 2px solid #32b9cd;
+  min-height: var(--tamanho-header);
+  background-color: var(--marinho);
 }
 
+/* flex-wrap: em tela pequena o menu desce para a linha de baixo */
 .header .container {
   justify-content: space-between;
   align-items: center;
-  height: 100%;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding: 12px 0;
 }
 
 .header a {
   text-decoration: none;
-  color: #e3b062;
+  color: var(--branco);
 }
 
-.agora {
-  font-weight: 800;
-}
-
-.navbar {
-  width: 300px;
+/* Logo (mão fazendo o S) + nome do site */
+.marca {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  list-style: none;
-  color: #e3b062;
+  gap: 10px;
+}
+
+.marca img {
+  width: 52px;
+  height: 52px;
 }
 
 .titulo {
-  color: #32b9cd;
-  width: fit-content;
-  font-weight: 500;
+  color: var(--branco);
+  font-size: 26px;
+  font-weight: 800;
 }
 
 .header h1 {
   margin: 0;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+}
+
+.navbar a:hover {
+  color: var(--azul-claro);
+}
+
+/* Página em que o usuário está */
+.agora a {
+  color: var(--azul-claro);
+}
+
+/* Link "Cadastro" em formato de botão */
+.navbar .botao-menu {
+  background-color: var(--azul);
+  padding: 6px 18px;
+  border-radius: 999px;
+}
+
+.navbar .botao-menu:hover {
+  color: var(--branco);
+  background-color: #3A73FF;
 }
 
 /* BANNER */
@@ -121,16 +169,20 @@ body {
 /* FOOTER */
 
 .footer {
-  background-color: #32b9cd;
-  height: 150px;
-  color: #fff;
-  display: flex;
+  background-color: var(--marinho);
+  color: #B9C4EC;
   font-size: 15px;
+  padding: 22px 0;
 }
 
 .footer .container {
   justify-content: center;
   text-align: center;
+}
+
+.footer h4 {
+  margin: 0;
+  font-weight: 600;
 }
 
 .footer .container .version {
