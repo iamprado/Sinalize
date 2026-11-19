@@ -23,6 +23,13 @@ body {
   font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
   background-color: var(--gelo);
   color: var(--texto);
+
+  /* A página ocupa no mínimo a altura da tela, com as faixas uma embaixo da outra.
+     Junto com o margin-top: auto do .footer, isso prende o rodapé no fim da tela
+     mesmo quando a página tem pouco conteúdo (login e cadastro). */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Centraliza o conteúdo de cada faixa da página */
@@ -547,6 +554,7 @@ body {
 /* FOOTER */
 
 .footer {
+  margin-top: auto; /* empurra o rodapé para o fim da tela */
   background-color: var(--marinho);
   color: #B9C4EC;
   font-size: 15px;
