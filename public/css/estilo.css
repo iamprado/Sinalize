@@ -111,27 +111,97 @@ body {
 /* BANNER */
 
 .banner {
-  height: var(--tamanho-banner);
-  color: white;
-  background-image: url('../assets/imgs/bg-jelly-fish-para-home.png');
-  background-size: cover;
+  background-color: var(--marinho);
+  color: var(--branco);
 }
 
+/* Texto à esquerda e imagem à direita; no celular a imagem desce */
 .banner .container {
-  justify-content: center;
   align-items: center;
-  height: 100%;
+  flex-wrap: wrap;
+  gap: 32px 48px;
+  padding: 48px 0 64px;
 }
 
-.banner .container p {
-  width: 50%;
+.banner-texto {
+  flex: 1 1 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.banner-texto p {
   margin: 0;
-  padding: 0;
-  font-size: 36px;
 }
 
-.banner .container span {
+.banner-texto .chamada {
+  color: var(--azul-claro);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.banner-texto h1 {
+  margin: 0;
+  font-size: 46px;
   font-weight: 800;
+  line-height: 1.2;
+}
+
+/* As palavras "mãos" e "olhos" em destaque */
+.banner-texto h1 span {
+  color: var(--azul-claro);
+}
+
+.banner-texto .descricao {
+  font-size: 19px;
+  line-height: 1.6;
+  color: #D6DEF8;
+}
+
+.banner-imagem {
+  flex: 0 1 300px;
+  margin: 0 auto;
+}
+
+.banner-imagem img {
+  width: 100%;
+}
+
+/* BOTÕES */
+
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.botao-redondo {
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: 2px solid var(--azul);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Botão preenchido de azul */
+.botao-cheio {
+  background-color: var(--azul);
+  color: var(--branco);
+}
+
+.botao-cheio:hover {
+  background-color: #3A73FF;
+  border-color: #3A73FF;
+}
+
+/* Botão só com a borda */
+.botao-vazado {
+  color: var(--branco);
+  border-color: var(--azul-claro);
+}
+
+.botao-vazado:hover {
+  background-color: #0B1650;
 }
 
 /* MISSÃO VISÃO VALORES */
