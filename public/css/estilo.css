@@ -249,36 +249,109 @@ body {
   color: var(--marinho);
 }
 
-/* MISSÃO VISÃO VALORES */
+/* O QUE É LIBRAS */
 
-.social {
-  background-color: #e5e5e5;
+.subtitulo {
+  margin: 0;
+  color: #4C567A;
+  font-size: 17px;
+}
+
+/* Três caixas lado a lado; no celular ficam uma embaixo da outra */
+.boxes {
   display: flex;
-}
-
-.social .container {
-  justify-content: center;
-}
-
-.box img {
-  width: 170px;
-}
-
-.social .container .boxes {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 30px 0;
-}
-
-.social p {
-  text-align: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .box {
+  flex: 1 1 260px;
+  background-color: var(--branco);
+  border: 1px solid #D5DDF2;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.box h3 {
+  margin: 0 0 10px;
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--azul);
+}
+
+.box p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* SINALIZE LETRA POR LETRA (datilologia) */
+
+.datilologia {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.letra {
+  width: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 6px;
+}
+
+/* object-fit: cover corta a foto para caber no quadro sem distorcer */
+.letra img,
+.letra video {
+  width: 100px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #D5DDF2;
+  background-color: var(--branco);
+}
+
+.letra span {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--marinho);
+}
+
+/* FAIXA DO QUIZ */
+
+.quiz {
+  background-color: var(--azul);
+  color: var(--branco);
+}
+
+.quiz .container {
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px 40px;
+  padding: 44px 0;
+}
+
+.quiz h2 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.quiz p {
+  margin: 0;
+  color: #E3EBFF;
+}
+
+/* Botão branco sobre a faixa azul */
+.quiz .botao-redondo {
+  background-color: var(--branco);
+  color: var(--marinho);
+  border-color: var(--branco);
+}
+
+.quiz .botao-redondo:hover {
+  background-color: var(--gelo);
 }
 
 /* FOOTER */
