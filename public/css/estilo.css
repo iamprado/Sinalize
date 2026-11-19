@@ -204,6 +204,51 @@ body {
   background-color: #0B1650;
 }
 
+/* SEÇÕES CLARAS (usadas nas partes da Home abaixo do banner) */
+
+.secao .container {
+  flex-direction: column;
+  gap: 28px;
+  padding: 64px 0;
+}
+
+.secao-branca {
+  background-color: var(--branco);
+}
+
+.secao h2 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--marinho);
+}
+
+/* MINHA HISTÓRIA */
+
+.historia-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 720px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.historia-texto p {
+  margin: 0;
+}
+
+/* Caixa que explica o que é CODA, com uma faixa azul à esquerda */
+.coda {
+  border-left: 4px solid var(--azul);
+  background-color: var(--gelo);
+  padding: 14px 18px;
+}
+
+.coda strong {
+  color: var(--marinho);
+}
+
 /* MISSÃO VISÃO VALORES */
 
 .social {
