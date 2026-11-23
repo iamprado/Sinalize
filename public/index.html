@@ -22,7 +22,8 @@
           <img src="assets/imgs/sinalize-mao.png" alt="Mão fazendo a letra S em Libras">
           <h1 class="titulo">Sinalize</h1>
         </a>
-        <ul class="navbar">
+        <!-- Menu de quem NÃO fez login (aparece por padrão) -->
+        <ul class="navbar" id="ul_visitante">
           <li class="agora">
             <a href="index.html">Início</a>
           </li>
@@ -34,6 +35,29 @@
           </li>
           <li>
             <a class="botao-menu" href="cadastro.html">Cadastro</a>
+          </li>
+        </ul>
+
+        <!-- Menu de quem fez login (escondido até o JavaScript confirmar o login) -->
+        <ul class="navbar" id="ul_logado" style="display: none">
+          <li class="agora">
+            <a href="index.html">Início</a>
+          </li>
+          <li>
+            <a href="aprenda.html">Aprenda</a>
+          </li>
+          <li>
+            <a href="quiz.html">Quiz</a>
+          </li>
+          <li>
+            <a href="dashboard.html">Dashboard</a>
+          </li>
+          <li class="usuario">
+            <span class="avatar" id="span_inicial"></span>
+            <span>Olá, <b id="b_usuario"></b></span>
+          </li>
+          <li>
+            <a class="sair" href="#" onclick="sair()">Sair</a>
           </li>
         </ul>
       </div>
@@ -124,3 +148,24 @@
   </body>
 
 </html>
+
+<script>
+  // O login guardou o nome na sessionStorage. Se ele existir, a pessoa está logada.
+  var nomeUsuario = sessionStorage.NOME_USUARIO;
+
+  if (nomeUsuario != undefined) {
+    // Troca o menu de visitante pelo menu de quem fez login
+    ul_visitante.style.display = "none";
+    ul_logado.style.display = "flex";
+
+    // Mostra o nome e a primeira letra dele na bolinha
+    b_usuario.innerHTML = nomeUsuario;
+    span_inicial.innerHTML = nomeUsuario[0].toUpperCase();
+  }
+
+  // Apaga os dados do login e recarrega a Home como visitante
+  function sair() {
+    sessionStorage.clear();
+    window.location = "index.html";
+  }
+</script>
