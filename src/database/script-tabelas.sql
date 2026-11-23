@@ -27,6 +27,29 @@ CREATE TABLE usuario (
 	CONSTRAINT chk_nivel CHECK (nivel_libras IN ('nunca', 'basico', 'intermediario', 'fluente'))
 );
 
+-- Uma tentativa é uma rodada do quiz. Um usuário tem várias tentativas (1:N).
+-- modo: "sinal" (vê o sinal e escolhe a letra) ou "invertido" (vê a letra e escolhe o sinal)
+CREATE TABLE tentativa (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	fk_usuario INT NOT NULL,
+	tema VARCHAR(20) NOT NULL,
+	modo VARCHAR(20) NOT NULL,
+	acertos INT NOT NULL,
+	total_perguntas INT NOT NULL,
+	data_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (fk_usuario) REFERENCES usuario(id)
+);
+
+-- Cada resposta é uma pergunta de uma tentativa. Uma tentativa tem várias respostas (1:N).
+-- acertou: 1 = acertou, 0 = errou. Daqui saem as "letras para revisar" e o "sinal mais errado".
+CREATE TABLE resposta (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	fk_tentativa INT NOT NULL,
+	sinal VARCHAR(20) NOT NULL,
+	acertou TINYINT NOT NULL,
+	FOREIGN KEY (fk_tentativa) REFERENCES tentativa(id)
+);
+
 CREATE TABLE aviso (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	titulo VARCHAR(100),

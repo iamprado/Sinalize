@@ -9,6 +9,7 @@
     <title>Sinalize | Página Inicial</title>
 
     <script src="./js/sessao.js"></script>
+    <script src="./js/sinais.js"></script>
 
     <link rel="stylesheet" href="./css/estilo.css">
     <link rel="icon" href="./assets/imgs/sinalize-mao.png">
@@ -226,6 +227,53 @@
         </div>
       </div>
 
+      <div class="secao" id="progresso">
+        <div class="container">
+          <h2>Seu progresso</h2>
+
+          <!-- Aparece quando a pessoa ainda não fez nenhum quiz -->
+          <div class="vazio" id="div_sem_tentativas" style="display: none">
+            <div class="vazio-texto">
+              <h3>Você ainda não fez nenhum quiz</h3>
+              <p>Depois da primeira rodada, aparecem aqui o seu resultado, o seu recorde e as letras para revisar.</p>
+            </div>
+            <div class="botoes">
+              <a class="botao-redondo botao-cheio" href="quiz.html?tema=alfabeto">Fazer o primeiro quiz</a>
+              <a class="botao-redondo botao-claro" href="aprenda.html?tema=alfabeto">Estudar o alfabeto</a>
+            </div>
+          </div>
+
+          <!-- Aparece quando já existe pelo menos uma tentativa -->
+          <div id="div_com_tentativas" style="display: none">
+            <div class="numeros">
+              <div class="numero">
+                <span>Última tentativa</span>
+                <strong id="strong_ultima"></strong>
+                <div class="barrinha"><div id="div_barra_ultima"></div></div>
+                <small id="small_ultima"></small>
+              </div>
+              <div class="numero">
+                <span>Melhor resultado</span>
+                <strong id="strong_melhor"></strong>
+                <div class="barrinha"><div id="div_barra_melhor"></div></div>
+                <small id="small_melhor"></small>
+              </div>
+              <div class="numero">
+                <span>Sua evolução</span>
+                <strong id="strong_evolucao"></strong>
+                <small id="small_evolucao"></small>
+              </div>
+            </div>
+
+            <div class="revisar" id="div_revisar" style="display: none">
+              <p><b>Letras para revisar.</b> Foram as que você errou na última tentativa.
+                <a href="aprenda.html?tema=alfabeto">Revisar no Aprenda</a></p>
+              <div class="letras-erradas" id="div_letras_erradas"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="quiz">
         <div class="container">
           <div>
@@ -271,8 +319,133 @@
     div_visitante.style.display = "none";
     div_logado.style.display = "block";
 
-    // Por enquanto a ofensiva começa em 0. Na parte 4 ela vem das tentativas salvas no banco.
-    desenharOfensiva(0);
+    // Busca as tentativas no banco para montar o progresso e a ofensiva
+    carregarProgresso();
+  }
+
+  function carregarProgresso() {
+    fetch(`/tentativas/usuario/${sessionStorage.ID_USUARIO}`)
+      .then(function (resposta) {
+        resposta.json().then(function (tentativas) {
+          console.log("Tentativas: ", tentativas);
+
+          if (tentativas.length == 0) {
+            // Primeiro acesso: ainda não fez nenhum quiz
+            div_sem_tentativas.style.display = "flex";
+            desenharOfensiva(0, false);
+          } else {
+            div_com_tentativas.style.display = "flex";
+            mostrarProgresso(tentativas);
+            calcularOfensiva(tentativas);
+            carregarLetrasParaRevisar();
+          }
+        });
+      })
+      .catch(function (erro) {
+        console.log("Erro ao buscar as tentativas: ", erro);
+        desenharOfensiva(0, false);
+      });
+  }
+
+  // Última tentativa, melhor resultado e evolução (última menos a primeira)
+  function mostrarProgresso(tentativas) {
+    var primeira = tentativas[0];
+    var ultima = tentativas[tentativas.length - 1];
+
+    // Percorre o vetor procurando a tentativa com mais acertos
+    var melhor = tentativas[0];
+    for (var i = 0; i < tentativas.length; i++) {
+      if (tentativas[i].acertos > melhor.acertos) {
+        melhor = tentativas[i];
+      }
+    }
+
+    var porcentagemUltima = (ultima.acertos / ultima.total_perguntas) * 100;
+    var porcentagemMelhor = (melhor.acertos / melhor.total_perguntas) * 100;
+    var evolucao = ultima.acertos - primeira.acertos;
+
+    strong_ultima.innerHTML = `${ultima.acertos} de ${ultima.total_perguntas}`;
+    div_barra_ultima.style.width = `${porcentagemUltima}%`;
+    small_ultima.innerHTML = `${porcentagemUltima.toFixed(0)}% de acertos · ${ultima.tema}`;
+
+    strong_melhor.innerHTML = `${melhor.acertos} de ${melhor.total_perguntas}`;
+    div_barra_melhor.style.width = `${porcentagemMelhor}%`;
+    small_melhor.innerHTML = `${porcentagemMelhor.toFixed(0)}% de acertos`;
+
+    if (evolucao > 0) {
+      strong_evolucao.innerHTML = `+${evolucao} acertos`;
+      strong_evolucao.className = "sobe";
+    } else {
+      strong_evolucao.innerHTML = `${evolucao} acertos`;
+      strong_evolucao.className = "";
+    }
+    small_evolucao.innerHTML = `da 1ª tentativa (${primeira.acertos}) para a última (${ultima.acertos})`;
+
+    p_boas_vindas.innerHTML = `Você já fez ${tentativas.length} tentativa(s). Que tal tentar bater o seu recorde de ${melhor.acertos} acertos?`;
+  }
+
+  // Transforma uma data no formato que vem do banco: 2026-11-23
+  function formatarData(data) {
+    var ano = data.getFullYear();
+    var mes = String(data.getMonth() + 1).padStart(2, "0");
+    var dia = String(data.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  // Ofensiva: quantos dias seguidos, até hoje (ou até ontem), a pessoa fez pelo menos um quiz
+  function calcularOfensiva(tentativas) {
+    // 1. Monta um vetor com os dias sem repetir (duas tentativas no mesmo dia contam uma vez)
+    var dias = [];
+    for (var i = 0; i < tentativas.length; i++) {
+      if (dias.indexOf(tentativas[i].dia) == -1) {
+        dias.push(tentativas[i].dia);
+      }
+    }
+
+    // 2. Começa a contar de hoje. Se hoje ainda não jogou, começa de ontem
+    //    (a ofensiva só se perde quando passa um dia inteiro sem quiz)
+    var esperado = new Date();
+    var jogouHoje = dias[dias.length - 1] == formatarData(esperado);
+    if (jogouHoje == false) {
+      esperado.setDate(esperado.getDate() - 1);
+    }
+
+    // 3. Anda do dia mais recente para trás, contando enquanto os dias forem seguidos
+    var ofensiva = 0;
+    for (var j = dias.length - 1; j >= 0; j--) {
+      if (dias[j] == formatarData(esperado)) {
+        ofensiva++;
+        esperado.setDate(esperado.getDate() - 1);
+      } else {
+        break; // achou um dia sem quiz: para de contar
+      }
+    }
+
+    desenharOfensiva(ofensiva, jogouHoje);
+  }
+
+  // Mostra a foto ou o vídeo das letras que a pessoa errou na última tentativa
+  function carregarLetrasParaRevisar() {
+    fetch(`/tentativas/usuario/${sessionStorage.ID_USUARIO}/erros`)
+      .then(function (resposta) {
+        resposta.json().then(function (erros) {
+          var html = "";
+          for (var i = 0; i < erros.length; i++) {
+            var sinal = buscarSinal(erros[i].sinal);   // função do js/sinais.js
+            if (sinal != null) {
+              html += `<div class="letra-errada">${htmlDoSinal(sinal)}<span>${sinal.nome}</span></div>`;
+            }
+          }
+
+          if (html != "") {
+            div_letras_erradas.innerHTML = html;
+            div_revisar.style.display = "flex";
+          }
+        });
+      })
+      .catch(function (erro) {
+        console.log("Erro ao buscar as letras para revisar: ", erro);
+      });
   }
 
   // Transforma o valor salvo no banco no texto que aparece no cadastro
@@ -289,17 +462,23 @@
   }
 
   // Desenha a ofensiva: o número de dias e a semana (os últimos 7 dias, terminando hoje).
-  // Os "dias" mais recentes ficam marcados de laranja.
-  function desenharOfensiva(dias) {
+  // Os dias da ofensiva ficam laranja. Se a pessoa ainda não jogou hoje, eles terminam ontem.
+  function desenharOfensiva(dias, jogouHoje) {
     var nomesDosDias = ["D", "S", "T", "Q", "Q", "S", "S"];
     var html = "";
+
+    // Hoje é o dia 0, ontem é o dia 1... Se não jogou hoje, a contagem começa no dia 1
+    var inicio = 0;
+    if (jogouHoje == false) {
+      inicio = 1;
+    }
 
     for (var i = 6; i >= 0; i--) {
       var data = new Date();
       data.setDate(data.getDate() - i);   // i dias atrás
 
       var classe = "dia";
-      if (i < dias) {
+      if (i >= inicio && i < inicio + dias) {
         classe += " feito";
       }
       if (i == 0) {
@@ -326,9 +505,12 @@
     if (dias == 0) {
       div_ofensiva.classList.add("apagada");
       p_ofensiva_dica.innerHTML = "Faça um quiz hoje para <b>acender</b> a sua ofensiva.";
-    } else {
+    } else if (jogouHoje) {
       div_ofensiva.classList.remove("apagada");
       p_ofensiva_dica.innerHTML = `Volte <b>amanhã</b> para chegar a ${dias + 1} dias.`;
+    } else {
+      div_ofensiva.classList.remove("apagada");
+      p_ofensiva_dica.innerHTML = `Faça um quiz <b>hoje</b> para não perder a sua ofensiva.`;
     }
   }
 

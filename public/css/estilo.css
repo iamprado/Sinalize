@@ -547,6 +547,155 @@ body {
   }
 }
 
+/* SEU PROGRESSO (Home logada) */
+
+#div_com_tentativas {
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Três quadros: última tentativa, melhor resultado e evolução */
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.numero {
+  background-color: var(--branco);
+  border: 1px solid #D5DDF2;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.numero span {
+  font-size: 14px;
+  font-weight: 700;
+  color: #4C567A;
+}
+
+.numero strong {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--marinho);
+  line-height: 1.1;
+}
+
+/* Evolução positiva fica verde */
+.numero strong.sobe {
+  color: #12805C;
+}
+
+.numero small {
+  font-size: 14px;
+  color: #4C567A;
+}
+
+/* Barra de porcentagem: a largura da parte azul é definida no JavaScript */
+.barrinha {
+  height: 8px;
+  background-color: var(--gelo);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barrinha div {
+  height: 100%;
+  background-color: var(--azul);
+}
+
+.revisar {
+  background-color: var(--branco);
+  border: 1px solid #D5DDF2;
+  border-radius: 16px;
+  padding: 18px 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.revisar p {
+  flex: 1 1 240px;
+  margin: 0;
+  color: #4C567A;
+}
+
+.revisar p b {
+  color: var(--marinho);
+}
+
+.revisar a {
+  color: var(--azul);
+  font-weight: 700;
+}
+
+.letras-erradas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.letra-errada {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 800;
+  color: var(--marinho);
+}
+
+.letra-errada img,
+.letra-errada video {
+  width: 64px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #C62E3B;
+}
+
+/* Quadro tracejado do primeiro acesso */
+.vazio {
+  border: 2px dashed #D5DDF2;
+  border-radius: 16px;
+  padding: 28px 24px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+}
+
+.vazio-texto {
+  flex: 1 1 300px;
+}
+
+.vazio-texto h3 {
+  margin: 0 0 6px;
+  font-size: 21px;
+  color: var(--marinho);
+}
+
+.vazio-texto p {
+  margin: 0;
+  color: #4C567A;
+}
+
+/* Botão branco com borda azul (sobre fundo claro) */
+.botao-claro {
+  color: var(--azul);
+  background-color: var(--branco);
+}
+
+.botao-claro:hover {
+  background-color: var(--gelo);
+}
+
+@media (max-width: 760px) {
+  .numeros {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* SINALIZE LETRA POR LETRA (datilologia) */
 
 .datilologia {
