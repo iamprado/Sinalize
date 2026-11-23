@@ -9,6 +9,8 @@
   --gelo: #F3F6FD;          /* fundo das seções claras */
   --branco: #FFFFFF;
   --texto: #131A3A;         /* texto sobre fundo claro */
+  --laranja: #FF8A2A;       /* chama da ofensiva */
+  --amarelo: #FFD166;       /* miolo da chama */
 
   --tamanho-header: 80px;
   --tamanho-banner: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
@@ -203,6 +205,124 @@ body {
 
 .banner-imagem img {
   width: 100%;
+}
+
+/* BANNER DE QUEM FEZ LOGIN */
+
+.banner-texto .nivel {
+  align-self: flex-start;
+  background-color: #0B1650;
+  border: 1px solid #26357A;
+  color: #D6DEF8;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+.banner-texto .nivel b {
+  color: var(--branco);
+}
+
+/* OFENSIVA (dias seguidos fazendo quiz) */
+
+.ofensiva {
+  flex: 0 1 320px;
+  margin: 0 auto;
+  background-color: #0B1650;
+  border: 1px solid #26357A;
+  border-radius: 20px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ofensiva-topo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.chama {
+  width: 56px;
+  height: 56px;
+}
+
+.chama path {
+  fill: var(--laranja);
+}
+
+.chama .miolo {
+  fill: var(--amarelo);
+}
+
+/* Sem ofensiva: a chama fica apagada (cinza) */
+.ofensiva.apagada .chama path {
+  fill: #3A4683;
+}
+
+.ofensiva-numero {
+  display: flex;
+  flex-direction: column;
+}
+
+.ofensiva-numero strong {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ofensiva-numero span {
+  color: #D6DEF8;
+  font-weight: 700;
+}
+
+/* Os 7 dias da semana lado a lado */
+.semana {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.dia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #B9C4EC;
+}
+
+.bolinha {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #3A4683;
+}
+
+/* Dia com quiz feito: bolinha laranja */
+.dia.feito .bolinha {
+  background-color: var(--laranja);
+  border-color: var(--laranja);
+}
+
+.dia.hoje span {
+  color: var(--branco);
+}
+
+.dia.hoje .bolinha {
+  border-color: var(--branco);
+}
+
+.ofensiva-dica {
+  margin: 0;
+  font-size: 14px;
+  color: #D6DEF8;
+}
+
+.ofensiva-dica b {
+  color: var(--amarelo);
 }
 
 /* BOTÕES */

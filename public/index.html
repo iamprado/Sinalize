@@ -63,7 +63,40 @@
       </div>
     </div>
   
-    <div class="banner">
+    <!-- Banner de quem fez login (escondido até o JavaScript confirmar o login) -->
+    <div class="banner" id="div_banner_logado" style="display: none">
+      <div class="container">
+        <div class="banner-texto">
+          <p class="chamada">Seu espaço no Sinalize</p>
+          <h1>Olá, <span id="span_nome"></span>!</h1>
+          <p class="descricao" id="p_boas_vindas">Escolha um tema abaixo para estudar ou para fazer o quiz.</p>
+          <p class="nivel">Seu contato com Libras: <b id="b_nivel"></b></p>
+          <div class="botoes">
+            <a class="botao-redondo botao-cheio" href="#temas">Fazer o quiz</a>
+            <a class="botao-redondo botao-vazado" href="dashboard.html">Ver meu dashboard</a>
+          </div>
+        </div>
+
+        <!-- Ofensiva: quantos dias seguidos a pessoa fez pelo menos um quiz -->
+        <div class="ofensiva apagada" id="div_ofensiva">
+          <div class="ofensiva-topo">
+            <svg class="chama" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2c1 3.5 5 6 5 11a5 5 0 0 1-10 0c0-2.4 1.2-4.2 2.6-5.6-.1 1.6.5 2.9 1.6 3.6C11 8.6 11.4 5 12 2z" />
+              <path class="miolo" d="M12 12.5c.6 1.4 2.2 2.3 2.2 4a2.2 2.2 0 0 1-4.4 0c0-1.2.9-2 1.5-2.6.1.6.4 1 .7 1.2 0-.9 0-1.8 0-2.6z" />
+            </svg>
+            <div class="ofensiva-numero">
+              <strong id="strong_ofensiva">0</strong>
+              <span id="span_ofensiva_texto">dias seguidos</span>
+            </div>
+          </div>
+          <div class="semana" id="div_semana"></div>
+          <p class="ofensiva-dica" id="p_ofensiva_dica"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Banner de visitante -->
+    <div class="banner" id="div_banner_visitante">
       <div class="container">
         <div class="banner-texto">
           <p class="chamada">Libras na minha vida</p>
@@ -161,6 +194,72 @@
     // Mostra o nome e a primeira letra dele na bolinha
     b_usuario.innerHTML = nomeUsuario;
     span_inicial.innerHTML = nomeUsuario[0].toUpperCase();
+
+    // Troca o banner de visitante pelo banner de boas-vindas
+    div_banner_visitante.style.display = "none";
+    div_banner_logado.style.display = "block";
+    span_nome.innerHTML = nomeUsuario;
+    b_nivel.innerHTML = textoDoNivel(sessionStorage.NIVEL_USUARIO);
+
+    // Por enquanto a ofensiva começa em 0. Na parte 4 ela vem das tentativas salvas no banco.
+    desenharOfensiva(0);
+  }
+
+  // Transforma o valor salvo no banco no texto que aparece no cadastro
+  function textoDoNivel(nivel) {
+    if (nivel == "nunca") {
+      return "Nunca tive contato";
+    } else if (nivel == "basico") {
+      return "Sei alguns sinais";
+    } else if (nivel == "intermediario") {
+      return "Consigo conversar um pouco";
+    } else {
+      return "Sou fluente";
+    }
+  }
+
+  // Desenha a ofensiva: o número de dias e a semana (os últimos 7 dias, terminando hoje).
+  // Os "dias" mais recentes ficam marcados de laranja.
+  function desenharOfensiva(dias) {
+    var nomesDosDias = ["D", "S", "T", "Q", "Q", "S", "S"];
+    var html = "";
+
+    for (var i = 6; i >= 0; i--) {
+      var data = new Date();
+      data.setDate(data.getDate() - i);   // i dias atrás
+
+      var classe = "dia";
+      if (i < dias) {
+        classe += " feito";
+      }
+      if (i == 0) {
+        classe += " hoje";
+      }
+
+      var nome = nomesDosDias[data.getDay()];
+      if (i == 0) {
+        nome = "Hoje";
+      }
+
+      html += `<div class="${classe}"><span>${nome}</span><div class="bolinha"></div></div>`;
+    }
+
+    div_semana.innerHTML = html;
+    strong_ofensiva.innerHTML = dias;
+
+    if (dias == 1) {
+      span_ofensiva_texto.innerHTML = "dia seguido";
+    } else {
+      span_ofensiva_texto.innerHTML = "dias seguidos";
+    }
+
+    if (dias == 0) {
+      div_ofensiva.classList.add("apagada");
+      p_ofensiva_dica.innerHTML = "Faça um quiz hoje para <b>acender</b> a sua ofensiva.";
+    } else {
+      div_ofensiva.classList.remove("apagada");
+      p_ofensiva_dica.innerHTML = `Volte <b>amanhã</b> para chegar a ${dias + 1} dias.`;
+    }
   }
 
   // Apaga os dados do login e recarrega a Home como visitante
