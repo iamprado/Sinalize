@@ -114,14 +114,164 @@
         div_modos.style.display = "none";
     }
 
-    var modo = "";
+    var TOTAL_PERGUNTAS = 10;
 
-    // 4. Guarda o modo escolhido e troca a tela de modos pela tela de perguntas
+    var modo = "";          // "sinal" = vê o sinal e escolhe a letra | "invertido" = vê a letra e escolhe o sinal
+    var perguntas = [];     // os 10 sinais sorteados
+    var atual = 0;          // posição da pergunta atual no vetor de perguntas
+    var acertos = 0;
+    var respostas = [];     // cada resposta: { sinal: "A", acertou: true }
+    var opcoesAtuais = [];  // as 4 opções da pergunta atual
+    var respondeu = false;  // impede responder duas vezes a mesma pergunta
+
+    // 4. Guarda o modo escolhido, troca a tela de modos pela de perguntas e começa o quiz
     function escolherModo(modoEscolhido) {
         modo = modoEscolhido;
+
+        if (modo == "sinal") {
+            p_subtitulo.innerHTML = "Modo: Qual é a letra?";
+        } else {
+            p_subtitulo.innerHTML = "Modo: Qual é o sinal?";
+        }
+
         div_modos.style.display = "none";
         div_jogo.style.display = "flex";
-        // As perguntas entram na parte 2
+        iniciarQuiz();
+    }
+
+    function iniciarQuiz() {
+        perguntas = sortearPerguntas(TOTAL_PERGUNTAS);
+        atual = 0;
+        acertos = 0;
+        respostas = [];
+        mostrarPergunta();
+    }
+
+    // 5. Sorteia sinais do tema sem repetir
+    function sortearPerguntas(quantidade) {
+        var sorteadas = [];
+        while (sorteadas.length < quantidade) {
+            // Math.random() dá um número entre 0 e 1; vezes o tamanho do vetor vira uma posição
+            var posicao = Math.floor(Math.random() * sinaisDoTema.length);
+            if (sorteadas.indexOf(sinaisDoTema[posicao]) == -1) {
+                sorteadas.push(sinaisDoTema[posicao]);
+            }
+        }
+        return sorteadas;
+    }
+
+    // 6. Monta as 4 opções: a certa + 3 sorteadas diferentes dela, depois embaralha
+    function montarOpcoes(certa) {
+        var opcoes = [certa];
+        while (opcoes.length < 4) {
+            var posicao = Math.floor(Math.random() * sinaisDoTema.length);
+            if (opcoes.indexOf(sinaisDoTema[posicao]) == -1) {
+                opcoes.push(sinaisDoTema[posicao]);
+            }
+        }
+
+        // Embaralha: troca cada posição com outra sorteada, para a certa não ficar sempre em 1º
+        for (var i = 0; i < opcoes.length; i++) {
+            var j = Math.floor(Math.random() * opcoes.length);
+            var guardada = opcoes[i];
+            opcoes[i] = opcoes[j];
+            opcoes[j] = guardada;
+        }
+        return opcoes;
+    }
+
+    // 7. Mostra a pergunta atual: barra de progresso, o que perguntar e as 4 opções
+    function mostrarPergunta() {
+        respondeu = false;
+        var certa = perguntas[atual];
+        opcoesAtuais = montarOpcoes(certa);
+
+        var porcentagemFeita = (atual / TOTAL_PERGUNTAS) * 100;
+
+        var html = `
+            <div class="progresso-quiz">
+                <span>Pergunta ${atual + 1} de ${TOTAL_PERGUNTAS}</span>
+                <div class="barrinha"><div style="width: ${porcentagemFeita}%"></div></div>
+                <span class="placar">${acertos} acerto(s)</span>
+            </div>`;
+
+        if (modo == "sinal") {
+            html += `<p class="pergunta">Qual letra é este sinal?</p>
+                     <div class="sinal-grande">${htmlDoSinal(certa)}</div>`;
+        } else {
+            html += `<p class="pergunta">Qual destes é o sinal da letra?</p>
+                     <div class="letra-grande">${certa.nome}</div>`;
+        }
+
+        html += `<div class="opcoes">`;
+        for (var i = 0; i < opcoesAtuais.length; i++) {
+            // No modo "sinal" a opção é a letra; no modo "invertido" é a foto/vídeo
+            var conteudo = opcoesAtuais[i].nome;
+            if (modo == "invertido") {
+                conteudo = htmlDoSinal(opcoesAtuais[i]);
+            }
+            html += `<button class="opcao" id="opcao_${i}" onclick="responder(${i})">${conteudo}</button>`;
+        }
+        html += `</div>
+                 <div id="div_retorno"></div>
+                 <div class="acoes-quiz" id="div_acoes"></div>`;
+
+        div_jogo.innerHTML = html;
+    }
+
+    // 8. Confere a resposta, pinta as opções e guarda o resultado da pergunta
+    function responder(indice) {
+        if (respondeu) {
+            return;
+        }
+        respondeu = true;
+
+        var certa = perguntas[atual];
+        var escolhida = opcoesAtuais[indice];
+        var acertou = escolhida.nome == certa.nome;
+
+        if (acertou) {
+            acertos++;
+        }
+        respostas.push({ sinal: certa.nome, acertou: acertou });
+
+        // Verde na opção certa; vermelho na escolhida, se estiver errada
+        for (var i = 0; i < opcoesAtuais.length; i++) {
+            var botao = document.getElementById(`opcao_${i}`);
+            botao.disabled = true;
+            if (opcoesAtuais[i].nome == certa.nome) {
+                botao.classList.add("certa");
+            } else if (i == indice) {
+                botao.classList.add("errada");
+            }
+        }
+
+        if (acertou) {
+            div_retorno.innerHTML = `<p class="retorno certo">Isso! É a letra ${certa.nome}.</p>`;
+        } else {
+            div_retorno.innerHTML = `<p class="retorno erro">Quase! A resposta certa é a letra ${certa.nome}.</p>`;
+        }
+
+        var textoBotao = "Próxima";
+        if (atual == TOTAL_PERGUNTAS - 1) {
+            textoBotao = "Ver resultado";
+        }
+        div_acoes.innerHTML = `<button class="botao-redondo botao-cheio" onclick="proxima()">${textoBotao}</button>`;
+    }
+
+    // 9. Vai para a próxima pergunta ou, depois da última, para o resultado
+    function proxima() {
+        atual++;
+        if (atual < TOTAL_PERGUNTAS) {
+            mostrarPergunta();
+        } else {
+            mostrarResultado();
+        }
+    }
+
+    // Resultado simples por enquanto; a tela completa entra na parte 3
+    function mostrarResultado() {
+        div_jogo.innerHTML = `<p class="pergunta">Fim! Você acertou ${acertos} de ${TOTAL_PERGUNTAS}.</p>`;
     }
 
     // Apaga os dados do login e volta para a Home como visitante
