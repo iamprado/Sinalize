@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sinalize | Quiz</title>
+
+    <script src="./js/sinais.js"></script>
+
+    <link rel="stylesheet" href="./css/estilo.css">
+    <link rel="icon" href="./assets/imgs/sinalize-mao.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <a class="marca" href="index.html">
+                <img src="assets/imgs/sinalize-mao.png" alt="Mão fazendo a letra S em Libras">
+                <h1 class="titulo">Sinalize</h1>
+            </a>
+            <ul class="navbar">
+                <li>
+                    <a href="index.html">Início</a>
+                </li>
+                <li>
+                    <a href="aprenda.html">Aprenda</a>
+                </li>
+                <li class="agora">
+                    <a href="quiz.html?tema=alfabeto">Quiz</a>
+                </li>
+                <li>
+                    <a href="dashboard.html">Dashboard</a>
+                </li>
+                <li class="usuario">
+                    <span class="avatar" id="span_inicial"></span>
+                    <span>Olá, <b id="b_usuario"></b></span>
+                </li>
+                <li>
+                    <a class="sair" href="#" onclick="sair()">Sair</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="pagina-quiz">
+        <div class="container">
+
+            <div class="quiz-topo">
+                <h2 id="h2_titulo"></h2>
+                <p id="p_subtitulo"></p>
+            </div>
+
+            <!-- Tela 1: escolha do modo -->
+            <div id="div_modos">
+                <div class="modos-quiz">
+                    <button class="modo-quiz" onclick="escolherModo('sinal')">
+                        <strong>Qual é a letra?</strong>
+                        <span>Você vê o sinal e escolhe a letra certa entre 4 opções.</span>
+                        <small>Bom para começar</small>
+                    </button>
+                    <button class="modo-quiz" onclick="escolherModo('invertido')">
+                        <strong>Qual é o sinal?</strong>
+                        <span>Você vê a letra e escolhe o sinal certo entre 4 fotos.</span>
+                        <small>Mais difícil</small>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tela 2: as perguntas (preenchida pelo JavaScript) -->
+            <div class="cartao-quiz" id="div_jogo" style="display: none"></div>
+
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <h4>Sinalize &middot; Thiago Prado &middot; SPTech &copy; 2026</h4>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    // 1. Só quem fez login pode fazer o quiz (a tentativa é salva no nome do usuário)
+    var nomeUsuario = sessionStorage.NOME_USUARIO;
+
+    if (nomeUsuario == undefined) {
+        window.location = "login.html";
+    } else {
+        b_usuario.innerHTML = nomeUsuario;
+        span_inicial.innerHTML = nomeUsuario[0].toUpperCase();
+    }
+
+    // 2. Lê o tema que veio no endereço: quiz.html?tema=alfabeto
+    var parametros = new URLSearchParams(window.location.search);
+    var tema = parametros.get("tema");
+
+    // 3. Escolhe o vetor de sinais do tema. Por enquanto só o alfabeto tem fotos gravadas.
+    var sinaisDoTema = [];
+
+    if (tema == "alfabeto") {
+        sinaisDoTema = alfabeto;   // vetor do js/sinais.js
+        h2_titulo.innerHTML = "Quiz do alfabeto";
+        p_subtitulo.innerHTML = `10 perguntas sorteadas entre as ${alfabeto.length} letras. Escolha o modo:`;
+    } else {
+        // Tema que não existe ou que ainda não tem fotos: volta para a escolha de temas
+        h2_titulo.innerHTML = "Tema não encontrado";
+        p_subtitulo.innerHTML = 'Esse tema ainda não está disponível. <a href="index.html#temas">Escolha outro tema</a>.';
+        div_modos.style.display = "none";
+    }
+
+    var modo = "";
+
+    // 4. Guarda o modo escolhido e troca a tela de modos pela tela de perguntas
+    function escolherModo(modoEscolhido) {
+        modo = modoEscolhido;
+        div_modos.style.display = "none";
+        div_jogo.style.display = "flex";
+        // As perguntas entram na parte 2
+    }
+
+    // Apaga os dados do login e volta para a Home como visitante
+    function sair() {
+        sessionStorage.clear();
+        window.location = "index.html";
+    }
+</script>
