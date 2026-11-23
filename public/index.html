@@ -113,6 +113,9 @@
       </div>
     </div>
 
+    <!-- Seções de visitante: escondidas quando a pessoa fez login -->
+    <div id="div_visitante">
+
     <div class="secao secao-branca" id="historia">
       <div class="container">
         <h2>Minha história</h2>
@@ -172,7 +175,70 @@
         <a class="botao-redondo" href="cadastro.html">Criar minha conta</a>
       </div>
     </div>
-  
+
+    </div>
+    <!-- fim das seções de visitante -->
+
+    <!-- Seções de quem fez login (escondidas até o JavaScript confirmar o login) -->
+    <div id="div_logado" style="display: none">
+
+      <div class="secao secao-branca" id="temas">
+        <div class="container">
+          <h2>Escolha um tema</h2>
+          <p class="subtitulo">Estude primeiro ou vá direto ao quiz.</p>
+
+          <div class="grade-temas">
+            <!-- Tema disponível: os links levam o nome do tema no endereço (?tema=alfabeto) -->
+            <div class="tema">
+              <img src="assets/sinais/alfabeto/A.png" alt="Sinal da letra A em Libras">
+              <div class="tema-texto">
+                <h3>Alfabeto</h3>
+                <p>26 letras, com fotos e vídeos</p>
+              </div>
+              <div class="tema-botoes">
+                <a class="botao-tema estudar" href="aprenda.html?tema=alfabeto">Estudar</a>
+                <a class="botao-tema fazer" href="quiz.html?tema=alfabeto">Fazer o quiz</a>
+              </div>
+            </div>
+
+            <!-- Temas que ainda não têm fotos gravadas -->
+            <div class="tema em-breve">
+              <div class="tema-vazio">1 2 3</div>
+              <div class="tema-texto"><h3>Números</h3><p>Em breve</p></div>
+            </div>
+            <div class="tema em-breve">
+              <div class="tema-vazio">Oi!</div>
+              <div class="tema-texto"><h3>Cumprimentos</h3><p>Em breve</p></div>
+            </div>
+            <div class="tema em-breve">
+              <div class="tema-vazio">Mãe</div>
+              <div class="tema-texto"><h3>Família</h3><p>Em breve</p></div>
+            </div>
+            <div class="tema em-breve">
+              <div class="tema-vazio">Azul</div>
+              <div class="tema-texto"><h3>Cores</h3><p>Em breve</p></div>
+            </div>
+            <div class="tema em-breve">
+              <div class="tema-vazio">Feliz</div>
+              <div class="tema-texto"><h3>Sentimentos</h3><p>Em breve</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz">
+        <div class="container">
+          <div>
+            <h2>Pronto para mais uma rodada?</h2>
+            <p>Cada dia com pelo menos um quiz aumenta a sua ofensiva.</p>
+          </div>
+          <a class="botao-redondo" href="#temas">Escolher um tema</a>
+        </div>
+      </div>
+
+    </div>
+    <!-- fim das seções de quem fez login -->
+
     <div class="footer">
       <div class="container">
         <h4>Sinalize &middot; Thiago Prado &middot; SPTech &copy; 2026</h4>
@@ -200,6 +266,10 @@
     div_banner_logado.style.display = "block";
     span_nome.innerHTML = nomeUsuario;
     b_nivel.innerHTML = textoDoNivel(sessionStorage.NIVEL_USUARIO);
+
+    // Troca as seções de visitante (história, Libras...) pelas de quem fez login (temas)
+    div_visitante.style.display = "none";
+    div_logado.style.display = "block";
 
     // Por enquanto a ofensiva começa em 0. Na parte 4 ela vem das tentativas salvas no banco.
     desenharOfensiva(0);

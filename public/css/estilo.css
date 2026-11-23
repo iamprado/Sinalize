@@ -442,6 +442,111 @@ body {
   line-height: 1.6;
 }
 
+/* ESCOLHA UM TEMA (Home logada) */
+
+/* Três cartões por linha; no celular viram um embaixo do outro */
+.grade-temas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Cada cartão: foto à esquerda, nome à direita e os botões embaixo */
+.tema {
+  background-color: var(--branco);
+  border: 2px solid var(--azul);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 14px;
+}
+
+.tema img,
+.tema-vazio {
+  width: 72px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Quadrado tracejado no lugar da foto dos temas que ainda não foram gravados */
+.tema-vazio {
+  background-color: var(--gelo);
+  border: 2px dashed #D5DDF2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  color: #4C567A;
+}
+
+.tema-texto {
+  flex: 1;
+}
+
+.tema h3 {
+  margin: 0;
+  font-size: 19px;
+  color: var(--marinho);
+}
+
+.tema p {
+  margin: 0;
+  font-size: 14px;
+  color: #4C567A;
+}
+
+.tema-botoes {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+}
+
+.botao-tema {
+  flex: 1;
+  text-align: center;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 2px solid var(--azul);
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.botao-tema.estudar {
+  color: var(--azul);
+  background-color: var(--branco);
+}
+
+.botao-tema.estudar:hover {
+  background-color: var(--gelo);
+}
+
+.botao-tema.fazer {
+  color: var(--branco);
+  background-color: var(--azul);
+}
+
+.botao-tema.fazer:hover {
+  background-color: #3A73FF;
+  border-color: #3A73FF;
+}
+
+/* Temas "Em breve": borda cinza e um pouco apagados */
+.tema.em-breve {
+  border: 1px solid #D5DDF2;
+  opacity: 0.75;
+}
+
+@media (max-width: 760px) {
+  .grade-temas {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* SINALIZE LETRA POR LETRA (datilologia) */
 
 .datilologia {
