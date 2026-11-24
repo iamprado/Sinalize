@@ -1161,6 +1161,64 @@ body {
   }
 }
 
+/* APRENDA: barra do modo treino */
+
+.ferramentas {
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background-color: var(--branco);
+  border: 1px solid #D5DDF2;
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+
+.ferramentas p {
+  margin: 0;
+  font-size: 15px;
+  color: #4C567A;
+}
+
+.ferramentas p b {
+  color: var(--marinho);
+}
+
+.botao-treino {
+  font-family: inherit;
+  cursor: pointer;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 2px solid var(--azul);
+  background-color: var(--branco);
+  color: var(--azul);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.botao-treino:hover {
+  background-color: var(--gelo);
+}
+
+.botao-treino.ativo {
+  background-color: var(--azul);
+  color: var(--branco);
+}
+
+/* Modo treino: o nome fica "apagado" (cor transparente sobre um fundo cinza)
+   até o cartão receber a classe "revelado" */
+.treino .nome-sinal {
+  color: transparent;
+  background-color: var(--gelo);
+  border-radius: 8px;
+  width: 100%;
+}
+
+.treino .revelado .nome-sinal {
+  color: var(--marinho);
+  background-color: transparent;
+}
+
 /* APRENDA: sinal ampliado */
 
 /* position: fixed + inset: 0 cobre a tela inteira, por cima da página */

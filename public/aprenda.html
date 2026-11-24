@@ -78,9 +78,26 @@
             <!-- Escolha do tema (quando a página abre sem ?tema= no endereço) -->
             <div class="escolher-tema" id="div_temas" style="display: none"></div>
 
+            <!-- Barra com a explicação e o botão do modo treino -->
+            <div class="ferramentas" id="div_ferramentas" style="display: none">
+                <p id="p_instrucao"><b>Clique em um sinal</b> para ver grande, com dica.</p>
+                <button class="botao-treino" id="btn_treino" onclick="alternarTreino()">Esconder os nomes</button>
+            </div>
+
             <!-- Grade com um cartão para cada sinal do tema (preenchida pelo JavaScript) -->
             <div class="grade-sinais" id="div_grade" style="display: none"></div>
 
+        </div>
+    </div>
+
+    <!-- Faixa do fim: leva para o quiz do mesmo tema -->
+    <div class="quiz" id="div_faixa_quiz" style="display: none">
+        <div class="container">
+            <div>
+                <h2 id="h2_faixa"></h2>
+                <p>Teste o que você acabou de estudar. Cada rodada conta para a sua ofensiva.</p>
+            </div>
+            <a class="botao-redondo" id="a_fazer_quiz" href="quiz.html">Fazer o quiz</a>
         </div>
     </div>
 
@@ -134,6 +151,11 @@
         p_subtitulo.innerHTML = `${dadosTema.sinais.length} ${dadosTema.itens} para estudar.`;
         a_voltar.style.display = "inline";
         montarGrade();
+
+        // Faixa do fim com o link para o quiz do mesmo tema
+        h2_faixa.innerHTML = `Quer fazer o quiz de ${dadosTema.titulo} agora?`;
+        a_fazer_quiz.href = `quiz.html?tema=${tema}`;
+        div_faixa_quiz.style.display = "block";
     }
 
     // 3. Monta um cartão para cada sinal do tema: foto ou vídeo + nome
@@ -148,9 +170,9 @@
                 etiqueta = `<span class="movimento">com movimento</span>`;
             }
 
-            // O cartão é um botão: ao clicar, abre o sinal ampliado
+            // O cartão é um botão: ao clicar, abre o sinal (ou revela o nome, no modo treino)
             html += `
-                <button class="cartao-sinal" id="cartao_${i}" onclick="abrirSinal(${i})">
+                <button class="cartao-sinal" id="cartao_${i}" onclick="clicarCartao(${i})">
                     ${htmlDoSinal(sinais[i])}
                     <span class="nome-sinal">${sinais[i].nome}</span>
                     ${etiqueta}
@@ -159,6 +181,38 @@
 
         div_grade.innerHTML = html;
         div_grade.style.display = "grid";
+        div_ferramentas.style.display = "flex";
+    }
+
+    // 5. Modo treino: esconde os nomes para a pessoa tentar lembrar.
+    //    O botão liga e desliga a classe "treino" na grade; o CSS faz o resto.
+    function alternarTreino() {
+        var ligado = div_grade.classList.toggle("treino");   // toggle devolve true se ligou
+
+        if (ligado) {
+            btn_treino.innerHTML = "Mostrar os nomes";
+            btn_treino.classList.add("ativo");
+            p_instrucao.innerHTML = "<b>Modo treino:</b> tente lembrar o significado e clique no cartão para conferir.";
+        } else {
+            btn_treino.innerHTML = "Esconder os nomes";
+            btn_treino.classList.remove("ativo");
+            p_instrucao.innerHTML = "<b>Clique em um sinal</b> para ver grande, com dica.";
+        }
+
+        // Ao ligar ou desligar, todos os nomes voltam a ficar escondidos
+        var cartoes = div_grade.querySelectorAll(".cartao-sinal");
+        for (var i = 0; i < cartoes.length; i++) {
+            cartoes[i].classList.remove("revelado");
+        }
+    }
+
+    // No modo treino o clique revela o nome; fora dele, abre o sinal ampliado
+    function clicarCartao(posicao) {
+        if (div_grade.classList.contains("treino")) {
+            document.getElementById(`cartao_${posicao}`).classList.add("revelado");
+        } else {
+            abrirSinal(posicao);
+        }
     }
 
     // Monta um botão para cada tema do objeto "temas" (o mesmo usado no quiz)
