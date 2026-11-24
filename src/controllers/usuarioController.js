@@ -23,8 +23,7 @@ function autenticar(req, res) {
                         res.json({
                             id: resultadoAutenticar[0].id,
                             email: resultadoAutenticar[0].email,
-                            nome: resultadoAutenticar[0].nome,
-                            nivel: resultadoAutenticar[0].nivel_libras
+                            nome: resultadoAutenticar[0].nome
                         });
                     } else if (resultadoAutenticar.length == 0) {
                         res.status(403).send("Email e/ou senha inválido(s)");
@@ -48,7 +47,6 @@ function cadastrar(req, res) {
     var nome = req.body.nomeServer;
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
-    var nivel = req.body.nivelServer;
 
     // Faça as validações dos valores
     if (nome == undefined) {
@@ -57,12 +55,10 @@ function cadastrar(req, res) {
         res.status(400).send("Seu email está undefined!");
     } else if (senha == undefined) {
         res.status(400).send("Sua senha está undefined!");
-    } else if (nivel == undefined) {
-        res.status(400).send("Seu nível de Libras está undefined!");
     } else {
 
         // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
-        usuarioModel.cadastrar(nome, email, senha, nivel)
+        usuarioModel.cadastrar(nome, email, senha)
             .then(
                 function (resultado) {
                     res.json(resultado);

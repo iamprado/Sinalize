@@ -207,22 +207,6 @@ body {
   width: 100%;
 }
 
-/* BANNER DE QUEM FEZ LOGIN */
-
-.banner-texto .nivel {
-  align-self: flex-start;
-  background-color: #0B1650;
-  border: 1px solid #26357A;
-  color: #D6DEF8;
-  padding: 5px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-}
-
-.banner-texto .nivel b {
-  color: var(--branco);
-}
-
 /* OFENSIVA (dias seguidos fazendo quiz) */
 
 .ofensiva {

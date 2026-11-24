@@ -93,18 +93,6 @@
           </div>
         </div>
 
-        <div class="campo-cadastro">
-          <label for="sel_nivel">Qual o seu contato com Libras?</label>
-          <select id="sel_nivel">
-            <option value="">Selecione</option>
-            <option value="nunca">Nunca tive contato</option>
-            <option value="basico">Sei alguns sinais</option>
-            <option value="intermediario">Consigo conversar um pouco</option>
-            <option value="fluente">Sou fluente</option>
-          </select>
-          <span class="msg-erro" id="erro_nivel"></span>
-        </div>
-
         <div class="resultado" id="div_resultado"></div>
 
         <button class="botao-redondo botao-cheio" onclick="cadastrar()">Criar minha conta</button>
@@ -131,14 +119,12 @@
     var emailVar = ipt_email.value.trim();
     var senhaVar = ipt_senha.value;
     var confirmarVar = ipt_confirmar.value;
-    var nivelVar = sel_nivel.value;
 
     // 2. Limpa as mensagens de erro da tentativa anterior
     erro_nome.innerHTML = "";
     erro_email.innerHTML = "";
     erro_senha.innerHTML = "";
     erro_confirmar.innerHTML = "";
-    erro_nivel.innerHTML = "";
     div_resultado.style.display = "none";
 
     // 3. Valida cada campo. Se algum estiver errado, "valido" vira false
@@ -167,11 +153,6 @@
       valido = false;
     }
 
-    if (nivelVar == "") {
-      erro_nivel.innerHTML = "Escolha uma opção.";
-      valido = false;
-    }
-
     if (valido == false) {
       mostrarResultado("Confira os campos marcados em vermelho.", "erro");
       return false;
@@ -186,8 +167,7 @@
       body: JSON.stringify({
         nomeServer: nomeVar,
         emailServer: emailVar,
-        senhaServer: senhaVar,
-        nivelServer: nivelVar
+        senhaServer: senhaVar
       }),
     })
       .then(function (resposta) {

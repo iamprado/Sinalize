@@ -75,7 +75,6 @@
           <p class="chamada">Seu espaço no Sinalize</p>
           <h1>Olá, <span id="span_nome"></span>!</h1>
           <p class="descricao" id="p_boas_vindas">Escolha um tema abaixo para estudar ou para fazer o quiz.</p>
-          <p class="nivel">Seu contato com Libras: <b id="b_nivel"></b></p>
           <div class="botoes">
             <a class="botao-redondo botao-cheio" href="#temas">Fazer o quiz</a>
             <a class="botao-redondo botao-vazado" href="dashboard.html">Ver meu dashboard</a>
@@ -352,7 +351,6 @@
     div_banner_visitante.style.display = "none";
     div_banner_logado.style.display = "block";
     span_nome.innerHTML = nomeUsuario;
-    b_nivel.innerHTML = textoDoNivel(sessionStorage.NIVEL_USUARIO);
 
     // Troca as seções de visitante (história, Libras...) pelas de quem fez login (temas)
     div_visitante.style.display = "none";
@@ -423,7 +421,6 @@
     p_boas_vindas.innerHTML = `Você já fez ${tentativas.length} tentativa(s). Que tal tentar bater o seu recorde de ${melhor.acertos} acertos?`;
   }
 
-  // Transforma uma data no formato que vem do banco: 2026-11-23
   // Ofensiva: a conta fica no js/ofensiva.js (a dashboard usa a mesma)
   function calcularOfensiva(tentativas) {
     var ofensiva = contarOfensiva(tentativas);
@@ -452,19 +449,6 @@
       .catch(function (erro) {
         console.log("Erro ao buscar as letras para revisar: ", erro);
       });
-  }
-
-  // Transforma o valor salvo no banco no texto que aparece no cadastro
-  function textoDoNivel(nivel) {
-    if (nivel == "nunca") {
-      return "Nunca tive contato";
-    } else if (nivel == "basico") {
-      return "Sei alguns sinais";
-    } else if (nivel == "intermediario") {
-      return "Consigo conversar um pouco";
-    } else {
-      return "Sou fluente";
-    }
   }
 
   // Desenha a ofensiva: o número de dias e a semana (os últimos 7 dias, terminando hoje).
