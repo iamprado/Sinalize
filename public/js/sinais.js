@@ -1,6 +1,8 @@
-// Vetor com todos os sinais do alfabeto gravados para o Sinalize.
-// É usado na Home (letras para revisar), no quiz e no Aprenda.
-// tipo "foto" vira <img> na página; tipo "video" vira <video> (letras com movimento).
+// Vetores com todos os sinais do Sinalize, um por tema.
+// São usados na Home (letras para revisar), no quiz e no Aprenda.
+// tipo "foto" vira <img> na página; tipo "video" vira <video> (sinais com movimento).
+// Para trocar um vídeo por foto, mude o "arquivo" para .png e o "tipo" para "foto".
+
 var alfabeto = [
     { nome: "A", arquivo: "assets/sinais/alfabeto/A.png", tipo: "foto" },
     { nome: "B", arquivo: "assets/sinais/alfabeto/B.png", tipo: "foto" },
@@ -30,20 +32,37 @@ var alfabeto = [
     { nome: "Z", arquivo: "assets/sinais/alfabeto/Z.mp4", tipo: "video" }
 ];
 
-// Procura um sinal pelo nome no vetor (ex.: "N") e devolve o objeto dele
+// Informações de cada tema: o nome que aparece na tela, o vetor de sinais
+// e como chamar cada item ("letra" no alfabeto, "número" nos números, "sinal" no resto).
+// A chave (alfabeto, numeros...) é o valor que vai no endereço: quiz.html?tema=numeros
+var temas = {
+    alfabeto: { titulo: "Alfabeto", sinais: alfabeto, item: "letra", itens: "letras" }
+};
+
+// Procura um sinal pelo nome (ex.: "N" ou "Bom dia") em todos os temas e devolve o objeto dele
 function buscarSinal(nome) {
-    for (var i = 0; i < alfabeto.length; i++) {
-        if (alfabeto[i].nome == nome) {
-            return alfabeto[i];
+    var listaDeTemas = [alfabeto];
+
+    for (var t = 0; t < listaDeTemas.length; t++) {
+        var sinais = listaDeTemas[t];
+        for (var i = 0; i < sinais.length; i++) {
+            if (sinais[i].nome == nome) {
+                return sinais[i];
+            }
         }
     }
     return null;
 }
 
-// Monta o HTML da foto ou do vídeo de um sinal
+// Monta o HTML da foto ou do vídeo de um sinal.
+// Se o arquivo ainda não foi gravado (não existe na pasta), o onerror troca a mídia
+// por um quadro "vídeo em breve", para a página não ficar com um buraco.
+// O quadro não mostra o nome do sinal, senão entregaria a resposta no quiz.
 function htmlDoSinal(sinal) {
+    var seFaltar = `this.outerHTML = '<div class=&quot;sinal-faltando&quot;>Vídeo<small>em breve</small></div>'`;
+
     if (sinal.tipo == "video") {
-        return `<video src="${sinal.arquivo}" autoplay loop muted playsinline aria-label="Sinal ${sinal.nome} em Libras"></video>`;
+        return `<video src="${sinal.arquivo}" autoplay loop muted playsinline aria-label="Sinal ${sinal.nome} em Libras" onerror="${seFaltar}"></video>`;
     }
-    return `<img src="${sinal.arquivo}" alt="Sinal ${sinal.nome} em Libras">`;
+    return `<img src="${sinal.arquivo}" alt="Sinal ${sinal.nome} em Libras" onerror="${seFaltar}">`;
 }

@@ -58,13 +58,13 @@
             <div id="div_modos">
                 <div class="modos-quiz">
                     <button class="modo-quiz" onclick="escolherModo('sinal')">
-                        <strong>Qual é a letra?</strong>
-                        <span>Você vê o sinal e escolhe a letra certa entre 4 opções.</span>
+                        <strong id="strong_modo_sinal">Qual é a letra?</strong>
+                        <span id="span_modo_sinal">Você vê o sinal e escolhe a letra certa entre 4 opções.</span>
                         <small>Bom para começar</small>
                     </button>
                     <button class="modo-quiz" onclick="escolherModo('invertido')">
                         <strong>Qual é o sinal?</strong>
-                        <span>Você vê a letra e escolhe o sinal certo entre 4 fotos.</span>
+                        <span id="span_modo_invertido">Você vê a letra e escolhe o sinal certo entre 4 opções.</span>
                         <small>Mais difícil</small>
                     </button>
                 </div>
@@ -100,23 +100,45 @@
     var parametros = new URLSearchParams(window.location.search);
     var tema = parametros.get("tema");
 
-    // 3. Escolhe o vetor de sinais do tema. Por enquanto só o alfabeto tem fotos gravadas.
+    // 3. Busca as informações do tema no objeto "temas" do js/sinais.js
+    //    (título, vetor de sinais e como chamar os itens: "letras", "números" ou "sinais")
+    var dadosTema = temas[tema];
     var sinaisDoTema = [];
-
-    if (tema == "alfabeto") {
-        sinaisDoTema = alfabeto;   // vetor do js/sinais.js
-        h2_titulo.innerHTML = "Quiz do alfabeto";
-        p_subtitulo.innerHTML = `10 perguntas sorteadas entre as ${alfabeto.length} letras. Escolha o modo:`;
-    } else {
-        // Tema que não existe ou que ainda não tem fotos: volta para a escolha de temas
-        h2_titulo.innerHTML = "Tema não encontrado";
-        p_subtitulo.innerHTML = 'Esse tema ainda não está disponível. <a href="index.html#temas">Escolha outro tema</a>.';
-        div_modos.style.display = "none";
-    }
-
     var TOTAL_PERGUNTAS = 10;
 
-    var modo = "";          // "sinal" = vê o sinal e escolhe a letra | "invertido" = vê a letra e escolhe o sinal
+    // Nome do modo "sinal" de acordo com o tema: letra, número ou significado
+    var nomeModoSinal = "O que significa?";
+    if (tema == "alfabeto") {
+        nomeModoSinal = "Qual é a letra?";
+    } else if (tema == "numeros") {
+        nomeModoSinal = "Qual é o número?";
+    }
+
+    if (dadosTema == undefined) {
+        // Tema que não existe no endereço: volta para a escolha de temas
+        h2_titulo.innerHTML = "Tema não encontrado";
+        p_subtitulo.innerHTML = 'Esse tema não existe. <a href="index.html#temas">Escolha um tema</a>.';
+        div_modos.style.display = "none";
+    } else {
+        sinaisDoTema = dadosTema.sinais;
+
+        // Temas com menos de 10 sinais fazem uma pergunta por sinal
+        if (sinaisDoTema.length < TOTAL_PERGUNTAS) {
+            TOTAL_PERGUNTAS = sinaisDoTema.length;
+        }
+
+        h2_titulo.innerHTML = `Quiz de ${dadosTema.titulo}`;
+        strong_modo_sinal.innerHTML = nomeModoSinal;
+        span_modo_sinal.innerHTML = "Você vê o sinal e escolhe o significado certo entre 4 opções.";
+        span_modo_invertido.innerHTML = "Você vê o significado e escolhe o sinal certo entre 4 opções.";
+        mostrarSubtituloInicial();
+    }
+
+    function mostrarSubtituloInicial() {
+        p_subtitulo.innerHTML = `${TOTAL_PERGUNTAS} perguntas sorteadas entre ${sinaisDoTema.length} ${dadosTema.itens}. Escolha o modo:`;
+    }
+
+    var modo = "";          // "sinal" = vê o sinal e escolhe o significado | "invertido" = vê o significado e escolhe o sinal
     var perguntas = [];     // os 10 sinais sorteados
     var atual = 0;          // posição da pergunta atual no vetor de perguntas
     var acertos = 0;
@@ -129,7 +151,7 @@
         modo = modoEscolhido;
 
         if (modo == "sinal") {
-            p_subtitulo.innerHTML = "Modo: Qual é a letra?";
+            p_subtitulo.innerHTML = `Modo: ${nomeModoSinal}`;
         } else {
             p_subtitulo.innerHTML = "Modo: Qual é o sinal?";
         }
@@ -196,21 +218,30 @@
             </div>`;
 
         if (modo == "sinal") {
-            html += `<p class="pergunta">Qual letra é este sinal?</p>
+            html += `<p class="pergunta">${nomeModoSinal}</p>
                      <div class="sinal-grande">${htmlDoSinal(certa)}</div>`;
         } else {
-            html += `<p class="pergunta">Qual destes é o sinal da letra?</p>
-                     <div class="letra-grande">${certa.nome}</div>`;
+            // Palavras compridas ("Bom dia") usam uma fonte menor que letras e números
+            var classeGrande = "letra-grande";
+            if (certa.nome.length > 2) {
+                classeGrande = "letra-grande palavra";
+            }
+            html += `<p class="pergunta">Qual destes é o sinal de...</p>
+                     <div class="${classeGrande}">${certa.nome}</div>`;
         }
 
         html += `<div class="opcoes">`;
         for (var i = 0; i < opcoesAtuais.length; i++) {
-            // No modo "sinal" a opção é a letra; no modo "invertido" é a foto/vídeo
+            // No modo "sinal" a opção é o significado; no modo "invertido" é a foto/vídeo
             var conteudo = opcoesAtuais[i].nome;
             if (modo == "invertido") {
                 conteudo = htmlDoSinal(opcoesAtuais[i]);
             }
-            html += `<button class="opcao" id="opcao_${i}" onclick="responder(${i})">${conteudo}</button>`;
+            var classeOpcao = "opcao";
+            if (modo == "sinal" && opcoesAtuais[i].nome.length > 2) {
+                classeOpcao = "opcao palavra";   // fonte menor para palavras
+            }
+            html += `<button class="${classeOpcao}" id="opcao_${i}" onclick="responder(${i})">${conteudo}</button>`;
         }
         html += `</div>
                  <div id="div_retorno"></div>
@@ -247,9 +278,9 @@
         }
 
         if (acertou) {
-            div_retorno.innerHTML = `<p class="retorno certo">Isso! É a letra ${certa.nome}.</p>`;
+            div_retorno.innerHTML = `<p class="retorno certo">Isso! É "${certa.nome}".</p>`;
         } else {
-            div_retorno.innerHTML = `<p class="retorno erro">Quase! A resposta certa é a letra ${certa.nome}.</p>`;
+            div_retorno.innerHTML = `<p class="retorno erro">Quase! A resposta certa é "${certa.nome}".</p>`;
         }
 
         var textoBotao = "Próxima";
@@ -269,23 +300,23 @@
         }
     }
 
-    // 10. Tela de resultado: porcentagem, mensagem, letras para revisar e o que fazer depois
+    // 10. Tela de resultado: porcentagem, mensagem, sinais para revisar e o que fazer depois
     function mostrarResultado() {
         var porcentagem = (acertos / TOTAL_PERGUNTAS) * 100;
 
         // Mensagem de acordo com a faixa de acertos
         var mensagem = "";
         if (porcentagem == 100) {
-            mensagem = "Perfeito! Você acertou todas as letras desta rodada.";
+            mensagem = `Perfeito! Você acertou todos os ${dadosTema.itens} desta rodada.`;
         } else if (porcentagem >= 70) {
-            mensagem = "Muito bem! Revise só as letras abaixo.";
+            mensagem = `Muito bem! Revise só os ${dadosTema.itens} abaixo.`;
         } else if (porcentagem >= 40) {
-            mensagem = "Bom começo. Estude as letras que errou e tente de novo.";
+            mensagem = `Bom começo. Estude os ${dadosTema.itens} que errou e tente de novo.`;
         } else {
-            mensagem = "Todo mundo começa assim. Veja as letras abaixo e tente outra rodada.";
+            mensagem = `Todo mundo começa assim. Veja os ${dadosTema.itens} abaixo e tente outra rodada.`;
         }
 
-        // Percorre as respostas e monta a foto de cada letra errada
+        // Percorre as respostas e monta a foto de cada sinal errado
         var htmlErros = "";
         for (var i = 0; i < respostas.length; i++) {
             if (respostas[i].acertou == false) {
@@ -307,7 +338,7 @@
             </div>`;
 
         if (htmlErros != "") {
-            html += `<p class="pergunta">Letras para revisar</p>
+            html += `<p class="pergunta">Para revisar</p>
                      <div class="letras-erradas">${htmlErros}</div>`;
         }
 
@@ -358,7 +389,7 @@
     function trocarModo() {
         div_jogo.style.display = "none";
         div_modos.style.display = "block";
-        p_subtitulo.innerHTML = `10 perguntas sorteadas entre as ${sinaisDoTema.length} letras. Escolha o modo:`;
+        mostrarSubtituloInicial();
     }
 
     // Apaga os dados do login e volta para a Home como visitante

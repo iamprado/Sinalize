@@ -647,7 +647,8 @@ body {
 }
 
 .letra-errada img,
-.letra-errada video {
+.letra-errada video,
+.letra-errada .sinal-faltando {
   width: 64px;
   height: 76px;
   /* contain: mostra a foto inteira dentro do quadro, sem cortar a mão */
@@ -811,7 +812,8 @@ body {
 }
 
 .sinal-grande img,
-.sinal-grande video {
+.sinal-grande video,
+.sinal-grande .sinal-faltando {
   width: 240px;
   height: 280px;
   /* contain: mostra a foto inteira dentro do quadro, sem cortar a mão */
@@ -867,7 +869,8 @@ body {
 }
 
 .opcao img,
-.opcao video {
+.opcao video,
+.opcao .sinal-faltando {
   width: 100%;
   max-width: 140px;
   height: 160px;
@@ -916,6 +919,42 @@ body {
   font-family: inherit;
   font-size: 16px;
   cursor: pointer;
+}
+
+/* Palavras ("Bom dia", "Prazer em conhecer") usam fonte menor que letras e números */
+.opcao.palavra {
+  font-size: 18px;
+}
+
+.letra-grande.palavra {
+  width: auto;
+  min-width: 160px;
+  max-width: 100%;
+  padding: 0 28px;
+  font-size: 40px;
+  text-align: center;
+}
+
+/* Quadro que aparece no lugar de um vídeo que ainda não foi gravado */
+.sinal-faltando {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  padding: 8px;
+  background-color: #F1F1F3;
+  border: 2px dashed #D5DDF2;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--marinho);
+}
+
+.sinal-faltando small {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4C567A;
 }
 
 @media (max-width: 640px) {
