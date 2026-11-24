@@ -269,9 +269,64 @@
         }
     }
 
-    // Resultado simples por enquanto; a tela completa entra na parte 3
+    // 10. Tela de resultado: porcentagem, mensagem, letras para revisar e o que fazer depois
     function mostrarResultado() {
-        div_jogo.innerHTML = `<p class="pergunta">Fim! Você acertou ${acertos} de ${TOTAL_PERGUNTAS}.</p>`;
+        var porcentagem = (acertos / TOTAL_PERGUNTAS) * 100;
+
+        // Mensagem de acordo com a faixa de acertos
+        var mensagem = "";
+        if (porcentagem == 100) {
+            mensagem = "Perfeito! Você acertou todas as letras desta rodada.";
+        } else if (porcentagem >= 70) {
+            mensagem = "Muito bem! Revise só as letras abaixo.";
+        } else if (porcentagem >= 40) {
+            mensagem = "Bom começo. Estude as letras que errou e tente de novo.";
+        } else {
+            mensagem = "Todo mundo começa assim. Veja as letras abaixo e tente outra rodada.";
+        }
+
+        // Percorre as respostas e monta a foto de cada letra errada
+        var htmlErros = "";
+        for (var i = 0; i < respostas.length; i++) {
+            if (respostas[i].acertou == false) {
+                var sinal = buscarSinal(respostas[i].sinal);   // função do js/sinais.js
+                htmlErros += `<div class="letra-errada">${htmlDoSinal(sinal)}<span>${sinal.nome}</span></div>`;
+            }
+        }
+
+        var html = `
+            <div class="resultado-topo">
+                <div class="nota">
+                    <strong>${porcentagem.toFixed(0)}%</strong>
+                    <span>${acertos} de ${TOTAL_PERGUNTAS}</span>
+                </div>
+                <div class="resultado-texto">
+                    <h3>Resultado</h3>
+                    <p>${mensagem}</p>
+                </div>
+            </div>`;
+
+        if (htmlErros != "") {
+            html += `<p class="pergunta">Letras para revisar</p>
+                     <div class="letras-erradas">${htmlErros}</div>`;
+        }
+
+        html += `
+            <div class="acoes-resultado">
+                <button class="botao-redondo botao-cheio" onclick="iniciarQuiz()">Jogar de novo</button>
+                <button class="botao-redondo botao-claro" onclick="trocarModo()">Trocar de modo</button>
+                <a class="botao-redondo botao-claro" href="aprenda.html?tema=${tema}">Estudar o tema</a>
+                <a class="botao-redondo botao-claro" href="index.html">Voltar ao início</a>
+            </div>`;
+
+        div_jogo.innerHTML = html;
+    }
+
+    // Volta para a tela de escolha do modo
+    function trocarModo() {
+        div_jogo.style.display = "none";
+        div_modos.style.display = "block";
+        p_subtitulo.innerHTML = `10 perguntas sorteadas entre as ${sinaisDoTema.length} letras. Escolha o modo:`;
     }
 
     // Apaga os dados do login e volta para a Home como visitante

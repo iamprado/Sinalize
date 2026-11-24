@@ -918,6 +918,66 @@ body {
   }
 }
 
+/* RESULTADO DO QUIZ */
+
+.resultado-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Círculo com a porcentagem de acertos */
+.nota {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 10px solid var(--azul);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.nota strong {
+  font-size: 34px;
+  color: var(--marinho);
+  line-height: 1;
+}
+
+.nota span {
+  font-size: 13px;
+  font-weight: 700;
+  color: #4C567A;
+}
+
+.resultado-texto {
+  flex: 1 1 260px;
+}
+
+.resultado-texto h3 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  color: var(--marinho);
+}
+
+.resultado-texto p {
+  margin: 0;
+  color: #4C567A;
+}
+
+.acoes-resultado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.acoes-resultado button {
+  font-family: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 /* SINALIZE LETRA POR LETRA (datilologia) */
 
 .datilologia {
