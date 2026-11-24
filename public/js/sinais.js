@@ -90,6 +90,20 @@ var cores = [
     { nome: "Cinza", arquivo: "assets/sinais/cores/cinza.mp4", tipo: "video" }
 ];
 
+var sentimentos = [
+    { nome: "Feliz", arquivo: "assets/sinais/sentimentos/feliz.mp4", tipo: "video" },
+    { nome: "Triste", arquivo: "assets/sinais/sentimentos/triste.mp4", tipo: "video" },
+    { nome: "Bravo", arquivo: "assets/sinais/sentimentos/bravo.mp4", tipo: "video" },
+    { nome: "Medo", arquivo: "assets/sinais/sentimentos/medo.mp4", tipo: "video" },
+    { nome: "Cansado", arquivo: "assets/sinais/sentimentos/cansado.mp4", tipo: "video" },
+    { nome: "Surpreso", arquivo: "assets/sinais/sentimentos/surpreso.mp4", tipo: "video" },
+    { nome: "Amor", arquivo: "assets/sinais/sentimentos/amor.mp4", tipo: "video" },
+    { nome: "Saudade", arquivo: "assets/sinais/sentimentos/saudade.mp4", tipo: "video" },
+    { nome: "Vergonha", arquivo: "assets/sinais/sentimentos/vergonha.mp4", tipo: "video" },
+    { nome: "Calmo", arquivo: "assets/sinais/sentimentos/calmo.mp4", tipo: "video" },
+    { nome: "Preocupado", arquivo: "assets/sinais/sentimentos/preocupado.mp4", tipo: "video" }
+];
+
 // Informações de cada tema: o nome que aparece na tela, o vetor de sinais
 // e como chamar cada item ("letra" no alfabeto, "número" nos números, "sinal" no resto).
 // A chave (alfabeto, numeros...) é o valor que vai no endereço: quiz.html?tema=numeros
@@ -98,12 +112,13 @@ var temas = {
     numeros: { titulo: "Números", sinais: numeros, item: "número", itens: "números" },
     cumprimentos: { titulo: "Cumprimentos", sinais: cumprimentos, item: "sinal", itens: "sinais" },
     familia: { titulo: "Família", sinais: familia, item: "sinal", itens: "sinais" },
-    cores: { titulo: "Cores", sinais: cores, item: "sinal", itens: "sinais" }
+    cores: { titulo: "Cores", sinais: cores, item: "sinal", itens: "sinais" },
+    sentimentos: { titulo: "Sentimentos", sinais: sentimentos, item: "sinal", itens: "sinais" }
 };
 
 // Procura um sinal pelo nome (ex.: "N" ou "Bom dia") em todos os temas e devolve o objeto dele
 function buscarSinal(nome) {
-    var listaDeTemas = [alfabeto, numeros, cumprimentos, familia, cores];
+    var listaDeTemas = [alfabeto, numeros, cumprimentos, familia, cores, sentimentos];
 
     for (var t = 0; t < listaDeTemas.length; t++) {
         var sinais = listaDeTemas[t];
