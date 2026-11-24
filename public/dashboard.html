@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sinalize | Dashboard</title>
+
+    <script src="./js/sinais.js"></script>
+    <script src="./js/ofensiva.js"></script>
+
+    <link rel="stylesheet" href="./css/estilo.css">
+    <link rel="icon" href="./assets/imgs/sinalize-mao.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <a class="marca" href="index.html">
+                <img src="assets/imgs/sinalize-mao.png" alt="Mão fazendo a letra S em Libras">
+                <h1 class="titulo">Sinalize</h1>
+            </a>
+            <ul class="navbar">
+                <li>
+                    <a href="index.html">Início</a>
+                </li>
+                <li>
+                    <a href="aprenda.html">Aprenda</a>
+                </li>
+                <li>
+                    <a href="quiz.html">Quiz</a>
+                </li>
+                <li class="agora">
+                    <a href="dashboard.html">Dashboard</a>
+                </li>
+                <li class="usuario">
+                    <span class="avatar" id="span_inicial"></span>
+                    <span>Olá, <b id="b_usuario"></b></span>
+                </li>
+                <li>
+                    <a class="sair" href="#" onclick="sair()">Sair</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Faixa marinho com os 4 números do usuário -->
+    <div class="resumo">
+        <div class="container">
+            <div>
+                <h2>Seu desempenho</h2>
+                <p class="resumo-sub" id="p_resumo">Carregando os seus resultados...</p>
+            </div>
+            <div class="kpis">
+                <div class="kpi">
+                    <span>Média de acertos</span>
+                    <strong id="kpi_media">–</strong>
+                    <small id="small_media">&nbsp;</small>
+                </div>
+                <div class="kpi">
+                    <span>Evolução</span>
+                    <strong class="sobe" id="kpi_evolucao">–</strong>
+                    <small id="small_evolucao">aparece a partir da 2ª tentativa</small>
+                </div>
+                <div class="kpi">
+                    <span>Ofensiva</span>
+                    <strong class="fogo" id="kpi_ofensiva">0 dias</strong>
+                    <small>seguidos fazendo quiz</small>
+                </div>
+                <div class="kpi">
+                    <span>Quizzes feitos</span>
+                    <strong id="kpi_quizzes">0</strong>
+                    <small id="small_quizzes">&nbsp;</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aparece quando a pessoa ainda não fez nenhum quiz -->
+    <div class="secao" id="div_sem_tentativas" style="display: none">
+        <div class="container">
+            <div class="vazio">
+                <div class="vazio-texto">
+                    <h3>Seus gráficos aparecem depois do primeiro quiz</h3>
+                    <p>Cada rodada é salva no banco e vira um ponto na sua evolução, uma barra por tema e uma lista de sinais para revisar.</p>
+                </div>
+                <div class="botoes">
+                    <a class="botao-redondo botao-cheio" href="quiz.html">Fazer o primeiro quiz</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Os gráficos entram aqui na próxima parte -->
+    <div id="div_graficos" style="display: none"></div>
+
+    <div class="footer">
+        <div class="container">
+            <h4>Sinalize &middot; Thiago Prado &middot; SPTech &copy; 2026</h4>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    // 1. Só quem fez login vê a dashboard (os dados são do usuário logado)
+    var nomeUsuario = sessionStorage.NOME_USUARIO;
+    var idUsuario = sessionStorage.ID_USUARIO;
+
+    if (nomeUsuario == undefined) {
+        window.location = "login.html";
+    } else {
+        b_usuario.innerHTML = nomeUsuario;
+        span_inicial.innerHTML = nomeUsuario[0].toUpperCase();
+        carregarTentativas();
+    }
+
+    // 2. Busca todas as tentativas do usuário (a mesma rota da Home)
+    function carregarTentativas() {
+        fetch(`/tentativas/usuario/${idUsuario}`)
+            .then(function (resposta) {
+                resposta.json().then(function (tentativas) {
+                    if (tentativas.length == 0) {
+                        p_resumo.innerHTML = "Você ainda não fez nenhum quiz. Os números aparecem depois da primeira rodada.";
+                        div_sem_tentativas.style.display = "block";
+                    } else {
+                        p_resumo.innerHTML = "Tudo o que você praticou no Sinalize, em números.";
+                        mostrarKpis(tentativas);
+                        div_graficos.style.display = "block";
+                    }
+                });
+            })
+            .catch(function (erro) {
+                console.log("Erro ao buscar as tentativas: ", erro);
+                p_resumo.innerHTML = "Não foi possível carregar os seus resultados agora.";
+            });
+    }
+
+    // 3. Calcula e mostra os 4 números do topo
+    function mostrarKpis(tentativas) {
+        // Média de acertos: soma dos acertos ÷ soma das perguntas × 100
+        var somaAcertos = 0;
+        var somaPerguntas = 0;
+        var temas = [];   // temas diferentes que a pessoa já praticou (sem repetir)
+
+        for (var i = 0; i < tentativas.length; i++) {
+            somaAcertos += tentativas[i].acertos;
+            somaPerguntas += tentativas[i].total_perguntas;
+
+            if (temas.indexOf(tentativas[i].tema) == -1) {
+                temas.push(tentativas[i].tema);
+            }
+        }
+
+        var media = (somaAcertos / somaPerguntas) * 100;
+        kpi_media.innerHTML = `${media.toFixed(0)}%`;
+        small_media.innerHTML = `${somaAcertos} de ${somaPerguntas} perguntas`;
+
+        // Evolução: variação percentual da primeira para a última tentativa
+        //   variação = (última − primeira) ÷ primeira × 100
+        if (tentativas.length >= 2) {
+            var primeira = tentativas[0].acertos;
+            var ultima = tentativas[tentativas.length - 1].acertos;
+            var diferenca = ultima - primeira;
+
+            var sinal = "";
+            if (diferenca > 0) {
+                sinal = "+";
+            }
+
+            if (primeira > 0) {
+                var variacao = (diferenca / primeira) * 100;
+                kpi_evolucao.innerHTML = `${sinal}${variacao.toFixed(0)}%`;
+            } else {
+                // Não dá para dividir por zero: mostra só a diferença em acertos
+                kpi_evolucao.innerHTML = `${sinal}${diferenca}`;
+            }
+            small_evolucao.innerHTML = `de ${primeira} para ${ultima} acertos (${sinal}${diferenca}) da 1ª para a última tentativa`;
+
+            // Melhorou: número verde. Piorou: número vermelho
+            if (diferenca < 0) {
+                kpi_evolucao.className = "desce";
+            } else {
+                kpi_evolucao.className = "sobe";
+            }
+        }
+
+        // Ofensiva: mesma conta da Home (js/ofensiva.js)
+        var ofensiva = contarOfensiva(tentativas);
+        if (ofensiva.dias == 1) {
+            kpi_ofensiva.innerHTML = "1 dia";
+        } else {
+            kpi_ofensiva.innerHTML = `${ofensiva.dias} dias`;
+        }
+
+        // Quizzes feitos e em quantos temas diferentes
+        kpi_quizzes.innerHTML = tentativas.length;
+        if (temas.length == 1) {
+            small_quizzes.innerHTML = "em 1 tema";
+        } else {
+            small_quizzes.innerHTML = `em ${temas.length} temas diferentes`;
+        }
+    }
+
+    // Apaga os dados do login e volta para a Home como visitante
+    function sair() {
+        sessionStorage.clear();
+        window.location = "index.html";
+    }
+</script>

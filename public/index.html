@@ -10,6 +10,7 @@
 
     <script src="./js/sessao.js"></script>
     <script src="./js/sinais.js"></script>
+    <script src="./js/ofensiva.js"></script>
 
     <link rel="stylesheet" href="./css/estilo.css">
     <link rel="icon" href="./assets/imgs/sinalize-mao.png">
@@ -420,43 +421,10 @@
   }
 
   // Transforma uma data no formato que vem do banco: 2026-11-23
-  function formatarData(data) {
-    var ano = data.getFullYear();
-    var mes = String(data.getMonth() + 1).padStart(2, "0");
-    var dia = String(data.getDate()).padStart(2, "0");
-    return `${ano}-${mes}-${dia}`;
-  }
-
-  // Ofensiva: quantos dias seguidos, até hoje (ou até ontem), a pessoa fez pelo menos um quiz
+  // Ofensiva: a conta fica no js/ofensiva.js (a dashboard usa a mesma)
   function calcularOfensiva(tentativas) {
-    // 1. Monta um vetor com os dias sem repetir (duas tentativas no mesmo dia contam uma vez)
-    var dias = [];
-    for (var i = 0; i < tentativas.length; i++) {
-      if (dias.indexOf(tentativas[i].dia) == -1) {
-        dias.push(tentativas[i].dia);
-      }
-    }
-
-    // 2. Começa a contar de hoje. Se hoje ainda não jogou, começa de ontem
-    //    (a ofensiva só se perde quando passa um dia inteiro sem quiz)
-    var esperado = new Date();
-    var jogouHoje = dias[dias.length - 1] == formatarData(esperado);
-    if (jogouHoje == false) {
-      esperado.setDate(esperado.getDate() - 1);
-    }
-
-    // 3. Anda do dia mais recente para trás, contando enquanto os dias forem seguidos
-    var ofensiva = 0;
-    for (var j = dias.length - 1; j >= 0; j--) {
-      if (dias[j] == formatarData(esperado)) {
-        ofensiva++;
-        esperado.setDate(esperado.getDate() - 1);
-      } else {
-        break; // achou um dia sem quiz: para de contar
-      }
-    }
-
-    desenharOfensiva(ofensiva, jogouHoje);
+    var ofensiva = contarOfensiva(tentativas);
+    desenharOfensiva(ofensiva.dias, ofensiva.jogouHoje);
   }
 
   // Mostra a foto ou o vídeo das letras que a pessoa errou na última tentativa
