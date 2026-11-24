@@ -1152,9 +1152,119 @@ body {
   color: var(--laranja);
 }
 
+/* DASHBOARD: gráficos */
+
+/* Dois cartões por linha; o de evolução ocupa a linha inteira */
+.graficos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.grafico {
+  background-color: var(--branco);
+  border: 1px solid #D5DDF2;
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.grafico.largo {
+  grid-column: 1 / -1;
+}
+
+.grafico h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--marinho);
+}
+
+.pergunta-grafico {
+  margin: 0;
+  font-size: 14px;
+  color: #4C567A;
+}
+
+/* O Chart.js ocupa a altura desta caixa */
+.area-grafico {
+  position: relative;
+  height: 260px;
+}
+
+/* Lista dos sinais mais errados: foto, letra, barra e número de erros */
+.erros-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.erros-lista p {
+  margin: 0;
+  color: #4C567A;
+}
+
+.erro-linha {
+  display: grid;
+  grid-template-columns: 52px 60px 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.erro-linha img,
+.erro-linha video,
+.erro-linha .sinal-faltando {
+  width: 52px;
+  height: 62px;
+  object-fit: contain;
+  background-color: #F1F1F3;
+  border-radius: 8px;
+  border: 2px solid #D5DDF2;
+}
+
+.erro-linha .sinal-faltando {
+  padding: 2px;
+  font-size: 10px;
+}
+
+.erro-linha b {
+  font-size: 16px;
+  color: var(--marinho);
+  text-align: center;
+}
+
+.erro-barra {
+  height: 12px;
+  background-color: var(--gelo);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.erro-barra div {
+  height: 100%;
+  background-color: #C62E3B;
+}
+
+.erro-linha span {
+  font-size: 14px;
+  font-weight: 700;
+  color: #4C567A;
+}
+
+.link-revisar {
+  color: var(--azul);
+  font-weight: 700;
+}
+
 @media (max-width: 820px) {
   .kpis {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .graficos {
+    grid-template-columns: 1fr;
   }
 }
 

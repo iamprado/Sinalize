@@ -11,6 +11,9 @@
     <script src="./js/sinais.js"></script>
     <script src="./js/ofensiva.js"></script>
 
+    <!-- Chart.js: biblioteca dos gráficos (versão fixa, para não mudar sozinha) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+
     <link rel="stylesheet" href="./css/estilo.css">
     <link rel="icon" href="./assets/imgs/sinalize-mao.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -94,8 +97,37 @@
         </div>
     </div>
 
-    <!-- Os gráficos entram aqui na próxima parte -->
-    <div id="div_graficos" style="display: none"></div>
+    <!-- Gráficos (aparecem quando existe pelo menos uma tentativa) -->
+    <div class="secao" id="div_graficos" style="display: none">
+        <div class="container">
+            <h2>Seus gráficos</h2>
+
+            <div class="graficos">
+                <div class="grafico largo">
+                    <h3>Acertos em cada tentativa</h3>
+                    <p class="pergunta-grafico">Estou evoluindo?</p>
+                    <div class="area-grafico">
+                        <canvas id="canvas_evolucao" aria-label="Gráfico de linha com os acertos de cada tentativa"></canvas>
+                    </div>
+                </div>
+
+                <div class="grafico">
+                    <h3>Sua média por tema</h3>
+                    <p class="pergunta-grafico">Em qual tema sou mais forte ou mais fraco?</p>
+                    <div class="area-grafico">
+                        <canvas id="canvas_temas" aria-label="Gráfico de barras com a média de acertos por tema"></canvas>
+                    </div>
+                </div>
+
+                <div class="grafico">
+                    <h3>Os sinais que você mais erra</h3>
+                    <p class="pergunta-grafico">O que preciso revisar?</p>
+                    <div class="erros-lista" id="div_mais_errados"></div>
+                    <a class="link-revisar" href="aprenda.html">Revisar no Aprenda</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="footer">
         <div class="container">
@@ -131,6 +163,9 @@
                         p_resumo.innerHTML = "Tudo o que você praticou no Sinalize, em números.";
                         mostrarKpis(tentativas);
                         div_graficos.style.display = "block";
+                        desenharEvolucao(tentativas);
+                        carregarMediaPorTema();
+                        carregarMaisErrados();
                     }
                 });
             })
@@ -204,6 +239,128 @@
         } else {
             small_quizzes.innerHTML = `em ${temas.length} temas diferentes`;
         }
+    }
+
+    // Configurações que valem para todos os gráficos
+    Chart.defaults.font.family = "Nunito, 'Segoe UI', Arial, sans-serif";
+    Chart.defaults.color = "#4C567A";
+    Chart.defaults.plugins.legend.display = false;
+    Chart.defaults.maintainAspectRatio = false;
+
+    // 4. Gráfico de linha: acertos de cada tentativa, da primeira para a última
+    function desenharEvolucao(tentativas) {
+        var rotulos = [];   // eixo X: 1ª, 2ª, 3ª...
+        var acertos = [];   // eixo Y: acertos de cada tentativa
+
+        for (var i = 0; i < tentativas.length; i++) {
+            rotulos.push(`${i + 1}ª`);
+            acertos.push(tentativas[i].acertos);
+        }
+
+        new Chart(canvas_evolucao, {
+            type: "line",
+            data: {
+                labels: rotulos,
+                datasets: [{
+                    label: "Acertos",
+                    data: acertos,
+                    borderColor: "#1D5BF0",
+                    backgroundColor: "rgba(29, 91, 240, 0.12)",
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 5,
+                    pointBackgroundColor: "#1D5BF0"
+                }]
+            },
+            options: {
+                scales: {
+                    y: { min: 0, max: 10, title: { display: true, text: "acertos (de 10)" } },
+                    x: { title: { display: true, text: "tentativa" } }
+                }
+            }
+        });
+    }
+
+    // 5. Gráfico de barras: média de acertos em cada tema (rota /media-por-tema)
+    function carregarMediaPorTema() {
+        fetch(`/tentativas/usuario/${idUsuario}/media-por-tema`)
+            .then(function (resposta) {
+                resposta.json().then(function (linhas) {
+                    var rotulos = [];
+                    var medias = [];
+
+                    for (var i = 0; i < linhas.length; i++) {
+                        // Troca a chave do banco ("numeros") pelo nome bonito ("Números") do js/sinais.js
+                        var nomeTema = linhas[i].tema;
+                        if (temas[linhas[i].tema] != undefined) {
+                            nomeTema = temas[linhas[i].tema].titulo;
+                        }
+                        rotulos.push(nomeTema);
+                        medias.push(Number(linhas[i].media));   // o banco devolve como texto
+                    }
+
+                    new Chart(canvas_temas, {
+                        type: "bar",
+                        data: {
+                            labels: rotulos,
+                            datasets: [{
+                                label: "Média de acertos (%)",
+                                data: medias,
+                                backgroundColor: "#1D5BF0",
+                                borderRadius: 6,
+                                maxBarThickness: 64
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: { min: 0, max: 100, ticks: { callback: function (valor) { return valor + "%"; } } }
+                            }
+                        }
+                    });
+                });
+            })
+            .catch(function (erro) {
+                console.log("Erro ao buscar a média por tema: ", erro);
+            });
+    }
+
+    // 6. Lista dos 5 sinais mais errados, com a foto e uma barra proporcional (rota /mais-errados)
+    function carregarMaisErrados() {
+        fetch(`/tentativas/usuario/${idUsuario}/mais-errados`)
+            .then(function (resposta) {
+                resposta.json().then(function (linhas) {
+                    if (linhas.length == 0) {
+                        div_mais_errados.innerHTML = "<p>Você ainda não errou nenhum sinal. Muito bem!</p>";
+                        return;
+                    }
+
+                    // O primeiro da lista é o que tem mais erros: ele ocupa 100% da barra.
+                    // Os outros usam regra de três: erros ÷ maior × 100
+                    var maior = linhas[0].erros;
+                    var html = "";
+
+                    for (var i = 0; i < linhas.length; i++) {
+                        var sinal = buscarSinal(linhas[i].sinal);   // função do js/sinais.js
+                        var midia = "";
+                        if (sinal != null) {
+                            midia = htmlDoSinal(sinal);
+                        }
+                        var largura = (linhas[i].erros / maior) * 100;
+
+                        html += `
+                            <div class="erro-linha">
+                                ${midia}
+                                <b>${linhas[i].sinal}</b>
+                                <div class="erro-barra"><div style="width: ${largura}%"></div></div>
+                                <span>${linhas[i].erros} erro(s)</span>
+                            </div>`;
+                    }
+                    div_mais_errados.innerHTML = html;
+                });
+            })
+            .catch(function (erro) {
+                console.log("Erro ao buscar os sinais mais errados: ", erro);
+            });
     }
 
     // Apaga os dados do login e volta para a Home como visitante
