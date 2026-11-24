@@ -23,24 +23,7 @@
                 <h1 class="titulo">Sinalize</h1>
             </a>
 
-            <!-- Menu de quem NÃO fez login: o Aprenda é aberto para qualquer pessoa -->
-            <ul class="navbar" id="ul_visitante">
-                <li>
-                    <a href="index.html">Início</a>
-                </li>
-                <li class="agora">
-                    <a href="aprenda.html">Aprenda</a>
-                </li>
-                <li>
-                    <a href="login.html">Login</a>
-                </li>
-                <li>
-                    <a class="botao-menu" href="cadastro.html">Cadastro</a>
-                </li>
-            </ul>
-
-            <!-- Menu de quem fez login (escondido até o JavaScript confirmar o login) -->
-            <ul class="navbar" id="ul_logado" style="display: none">
+            <ul class="navbar">
                 <li>
                     <a href="index.html">Início</a>
                 </li>
@@ -128,12 +111,12 @@
 </html>
 
 <script>
-    // 1. O Aprenda é aberto: se a pessoa fez login, troca o menu; se não, mantém o de visitante
+    // 1. Só quem fez login pode estudar (igual ao quiz e à dashboard)
     var nomeUsuario = sessionStorage.NOME_USUARIO;
 
-    if (nomeUsuario != undefined) {
-        ul_visitante.style.display = "none";
-        ul_logado.style.display = "flex";
+    if (nomeUsuario == undefined) {
+        window.location = "login.html";
+    } else {
         b_usuario.innerHTML = nomeUsuario;
         span_inicial.innerHTML = nomeUsuario[0].toUpperCase();
     }
