@@ -78,6 +78,9 @@
             <!-- Escolha do tema (quando a página abre sem ?tema= no endereço) -->
             <div class="escolher-tema" id="div_temas" style="display: none"></div>
 
+            <!-- Grade com um cartão para cada sinal do tema (preenchida pelo JavaScript) -->
+            <div class="grade-sinais" id="div_grade" style="display: none"></div>
+
         </div>
     </div>
 
@@ -113,6 +116,31 @@
         h2_titulo.innerHTML = dadosTema.titulo;
         p_subtitulo.innerHTML = `${dadosTema.sinais.length} ${dadosTema.itens} para estudar.`;
         a_voltar.style.display = "inline";
+        montarGrade();
+    }
+
+    // 3. Monta um cartão para cada sinal do tema: foto ou vídeo + nome
+    function montarGrade() {
+        var sinais = dadosTema.sinais;
+        var html = "";
+
+        for (var i = 0; i < sinais.length; i++) {
+            // Sinais gravados em vídeo têm movimento: ganham uma etiqueta
+            var etiqueta = "";
+            if (sinais[i].tipo == "video") {
+                etiqueta = `<span class="movimento">com movimento</span>`;
+            }
+
+            html += `
+                <div class="cartao-sinal" id="cartao_${i}">
+                    ${htmlDoSinal(sinais[i])}
+                    <span class="nome-sinal">${sinais[i].nome}</span>
+                    ${etiqueta}
+                </div>`;
+        }
+
+        div_grade.innerHTML = html;
+        div_grade.style.display = "grid";
     }
 
     // Monta um botão para cada tema do objeto "temas" (o mesmo usado no quiz)

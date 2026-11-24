@@ -1101,6 +1101,60 @@ body {
   text-decoration: underline;
 }
 
+/* APRENDA: grade de sinais.
+   auto-fill coloca quantos cartões couberem na linha (no mínimo 130px cada) */
+.grade-sinais {
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 14px;
+}
+
+.cartao-sinal {
+  background-color: var(--branco);
+  border: 2px solid #D5DDF2;
+  border-radius: 16px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.cartao-sinal img,
+.cartao-sinal video,
+.cartao-sinal .sinal-faltando {
+  width: 100%;
+  aspect-ratio: 5 / 6;
+  object-fit: contain;
+  background-color: #F1F1F3;
+  border-radius: 10px;
+}
+
+.nome-sinal {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--marinho);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Etiqueta azul dos sinais com movimento (gravados em vídeo) */
+.movimento {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--azul);
+  background-color: #E7EEFF;
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+
+@media (max-width: 640px) {
+  .grade-sinais {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
+
 /* DASHBOARD: faixa marinho com os números do usuário */
 
 .resumo {
