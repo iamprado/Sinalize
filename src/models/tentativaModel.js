@@ -27,7 +27,39 @@ function listarErrosUltima(idUsuario) {
     return database.executar(instrucaoSql);
 }
 
+// Grava uma rodada do quiz. A data_hora é preenchida pelo banco (DEFAULT CURRENT_TIMESTAMP).
+function registrarTentativa(idUsuario, tema, modo, acertos, total) {
+    var instrucaoSql = `
+        INSERT INTO tentativa (fk_usuario, tema, modo, acertos, total_perguntas)
+        VALUES (${idUsuario}, '${tema}', '${modo}', ${acertos}, ${total});
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+// Grava todas as respostas da tentativa em um único INSERT.
+// O for monta uma linha de VALUES para cada resposta: (idTentativa, 'A', 1), (idTentativa, 'N', 0)...
+function registrarRespostas(idTentativa, respostas) {
+    var valores = [];
+    for (var i = 0; i < respostas.length; i++) {
+        var acertou = 0;
+        if (respostas[i].acertou == true) {
+            acertou = 1;
+        }
+        valores.push(`(${idTentativa}, '${respostas[i].sinal}', ${acertou})`);
+    }
+
+    var instrucaoSql = `
+        INSERT INTO resposta (fk_tentativa, sinal, acertou)
+        VALUES ${valores.join(", ")};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     listarPorUsuario,
-    listarErrosUltima
+    listarErrosUltima,
+    registrarTentativa,
+    registrarRespostas
 };

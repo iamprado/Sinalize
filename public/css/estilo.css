@@ -966,6 +966,27 @@ body {
   color: #4C567A;
 }
 
+/* Aviso de que o resultado foi (ou não) salvo no banco */
+.salvo {
+  margin: 0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: var(--gelo);
+  color: #4C567A;
+}
+
+.salvo.certo {
+  background-color: #E6F6EF;
+  color: #12805C;
+}
+
+.salvo.erro {
+  background-color: #FDECEE;
+  color: #C62E3B;
+}
+
 .acoes-resultado {
   display: flex;
   flex-wrap: wrap;

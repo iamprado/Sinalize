@@ -13,4 +13,9 @@ router.get("/usuario/:idUsuario/erros", function (req, res) {
     tentativaController.listarErrosUltima(req, res);
 });
 
+// Salva uma rodada do quiz (a tentativa e cada resposta dela)
+router.post("/registrar", function (req, res) {
+    tentativaController.registrar(req, res);
+});
+
 module.exports = router;

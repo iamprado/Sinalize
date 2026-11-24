@@ -29,7 +29,44 @@ function listarErrosUltima(req, res) {
         });
 }
 
+function registrar(req, res) {
+    var idUsuario = req.body.idUsuarioServer;
+    var tema = req.body.temaServer;
+    var modo = req.body.modoServer;
+    var acertos = req.body.acertosServer;
+    var total = req.body.totalServer;
+    var respostas = req.body.respostasServer;   // vetor: [{ sinal: "A", acertou: true }, ...]
+
+    if (idUsuario == undefined) {
+        res.status(400).send("O id do usuário está undefined!");
+    } else if (tema == undefined || modo == undefined) {
+        res.status(400).send("O tema ou o modo está undefined!");
+    } else if (acertos == undefined || total == undefined) {
+        res.status(400).send("Os acertos ou o total estão undefined!");
+    } else if (respostas == undefined || respostas.length == 0) {
+        res.status(400).send("As respostas estão vazias!");
+    } else {
+        // 1º grava a tentativa; o banco devolve o id que ela recebeu (insertId)
+        tentativaModel.registrarTentativa(idUsuario, tema, modo, acertos, total)
+            .then(function (resultadoTentativa) {
+                var idTentativa = resultadoTentativa.insertId;
+
+                // 2º grava as respostas ligadas a essa tentativa
+                return tentativaModel.registrarRespostas(idTentativa, respostas);
+            })
+            .then(function () {
+                res.status(201).send("Tentativa salva!");
+            })
+            .catch(function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao salvar a tentativa: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            });
+    }
+}
+
 module.exports = {
     listarPorUsuario,
-    listarErrosUltima
+    listarErrosUltima,
+    registrar
 };

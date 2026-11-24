@@ -312,6 +312,7 @@
         }
 
         html += `
+            <p class="salvo" id="p_salvo">Salvando o seu resultado...</p>
             <div class="acoes-resultado">
                 <button class="botao-redondo botao-cheio" onclick="iniciarQuiz()">Jogar de novo</button>
                 <button class="botao-redondo botao-claro" onclick="trocarModo()">Trocar de modo</button>
@@ -320,6 +321,37 @@
             </div>`;
 
         div_jogo.innerHTML = html;
+
+        salvarTentativa();
+    }
+
+    // 11. Envia a rodada para a API (routes/tentativas.js -> tentativaController -> tentativaModel)
+    function salvarTentativa() {
+        fetch("/tentativas/registrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idUsuarioServer: sessionStorage.ID_USUARIO,
+                temaServer: tema,
+                modoServer: modo,
+                acertosServer: acertos,
+                totalServer: TOTAL_PERGUNTAS,
+                respostasServer: respostas
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                p_salvo.innerHTML = "Resultado salvo! Ele já conta para a sua ofensiva e aparece no seu progresso.";
+                p_salvo.classList.add("certo");
+            } else {
+                throw "Erro ao salvar a tentativa";
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            p_salvo.innerHTML = "Não foi possível salvar este resultado. Confira a conexão e jogue de novo.";
+            p_salvo.classList.add("erro");
+        });
     }
 
     // Volta para a tela de escolha do modo
