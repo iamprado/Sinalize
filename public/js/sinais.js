@@ -32,16 +32,31 @@ var alfabeto = [
     { nome: "Z", arquivo: "assets/sinais/alfabeto/Z.mp4", tipo: "video" }
 ];
 
+var numeros = [
+    { nome: "0", arquivo: "assets/sinais/numeros/0.mp4", tipo: "video" },
+    { nome: "1", arquivo: "assets/sinais/numeros/1.mp4", tipo: "video" },
+    { nome: "2", arquivo: "assets/sinais/numeros/2.mp4", tipo: "video" },
+    { nome: "3", arquivo: "assets/sinais/numeros/3.mp4", tipo: "video" },
+    { nome: "4", arquivo: "assets/sinais/numeros/4.mp4", tipo: "video" },
+    { nome: "5", arquivo: "assets/sinais/numeros/5.mp4", tipo: "video" },
+    { nome: "6", arquivo: "assets/sinais/numeros/6.mp4", tipo: "video" },
+    { nome: "7", arquivo: "assets/sinais/numeros/7.mp4", tipo: "video" },
+    { nome: "8", arquivo: "assets/sinais/numeros/8.mp4", tipo: "video" },
+    { nome: "9", arquivo: "assets/sinais/numeros/9.mp4", tipo: "video" },
+    { nome: "10", arquivo: "assets/sinais/numeros/10.mp4", tipo: "video" }
+];
+
 // Informações de cada tema: o nome que aparece na tela, o vetor de sinais
 // e como chamar cada item ("letra" no alfabeto, "número" nos números, "sinal" no resto).
 // A chave (alfabeto, numeros...) é o valor que vai no endereço: quiz.html?tema=numeros
 var temas = {
-    alfabeto: { titulo: "Alfabeto", sinais: alfabeto, item: "letra", itens: "letras" }
+    alfabeto: { titulo: "Alfabeto", sinais: alfabeto, item: "letra", itens: "letras" },
+    numeros: { titulo: "Números", sinais: numeros, item: "número", itens: "números" }
 };
 
 // Procura um sinal pelo nome (ex.: "N" ou "Bom dia") em todos os temas e devolve o objeto dele
 function buscarSinal(nome) {
-    var listaDeTemas = [alfabeto];
+    var listaDeTemas = [alfabeto, numeros];
 
     for (var t = 0; t < listaDeTemas.length; t++) {
         var sinais = listaDeTemas[t];
