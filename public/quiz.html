@@ -30,7 +30,7 @@
                     <a href="aprenda.html">Aprenda</a>
                 </li>
                 <li class="agora">
-                    <a href="quiz.html?tema=alfabeto">Quiz</a>
+                    <a href="quiz.html">Quiz</a>
                 </li>
                 <li>
                     <a href="dashboard.html">Dashboard</a>
@@ -53,6 +53,9 @@
                 <h2 id="h2_titulo"></h2>
                 <p id="p_subtitulo"></p>
             </div>
+
+            <!-- Tela 0: escolha do tema (quando o quiz abre sem ?tema= no endereço) -->
+            <div class="escolher-tema" id="div_temas" style="display: none"></div>
 
             <!-- Tela 1: escolha do modo -->
             <div id="div_modos">
@@ -115,10 +118,9 @@
     }
 
     if (dadosTema == undefined) {
-        // Tema que não existe no endereço: volta para a escolha de temas
-        h2_titulo.innerHTML = "Tema não encontrado";
-        p_subtitulo.innerHTML = 'Esse tema não existe. <a href="index.html#temas">Escolha um tema</a>.';
-        div_modos.style.display = "none";
+        // Sem tema no endereço (ex.: clicou em "Quiz" no menu) ou tema que não existe:
+        // mostra os temas para a pessoa escolher
+        mostrarEscolhaDeTema();
     } else {
         sinaisDoTema = dadosTema.sinais;
 
@@ -132,6 +134,25 @@
         span_modo_sinal.innerHTML = "Você vê o sinal e escolhe o significado certo entre 4 opções.";
         span_modo_invertido.innerHTML = "Você vê o significado e escolhe o sinal certo entre 4 opções.";
         mostrarSubtituloInicial();
+    }
+
+    // Monta um botão para cada tema do objeto "temas" (js/sinais.js).
+    // Cada botão abre o quiz com o tema no endereço: quiz.html?tema=numeros
+    function mostrarEscolhaDeTema() {
+        h2_titulo.innerHTML = "Quiz";
+        p_subtitulo.innerHTML = "Escolha o tema que você quer praticar:";
+        div_modos.style.display = "none";
+
+        var html = "";
+        for (var chave in temas) {
+            var t = temas[chave];
+            html += `<a class="botao-tema-quiz" href="quiz.html?tema=${chave}">
+                        <strong>${t.titulo}</strong>
+                        <span>${t.sinais.length} ${t.itens}</span>
+                     </a>`;
+        }
+        div_temas.innerHTML = html;
+        div_temas.style.display = "grid";
     }
 
     function mostrarSubtituloInicial() {

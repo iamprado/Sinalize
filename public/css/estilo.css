@@ -724,6 +724,43 @@ body {
   font-weight: 700;
 }
 
+/* Escolha de tema dentro do quiz: 3 por linha; no celular, 1 por linha */
+.escolher-tema {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.botao-tema-quiz {
+  background-color: var(--branco);
+  border: 2px solid #D5DDF2;
+  border-radius: 18px;
+  padding: 20px 24px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.botao-tema-quiz:hover {
+  border-color: var(--azul);
+}
+
+.botao-tema-quiz strong {
+  font-size: 20px;
+  color: var(--marinho);
+}
+
+.botao-tema-quiz span {
+  font-size: 15px;
+  color: #4C567A;
+}
+
+@media (max-width: 760px) {
+  .escolher-tema {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Os dois modos lado a lado; no celular um embaixo do outro */
 .modos-quiz {
   display: flex;
