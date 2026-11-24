@@ -650,7 +650,9 @@ body {
 .letra-errada video {
   width: 64px;
   height: 76px;
-  object-fit: cover;
+  /* contain: mostra a foto inteira dentro do quadro, sem cortar a mão */
+  object-fit: contain;
+  background-color: #F1F1F3;
   border-radius: 10px;
   border: 2px solid #C62E3B;
 }
@@ -812,7 +814,9 @@ body {
 .sinal-grande video {
   width: 240px;
   height: 280px;
-  object-fit: cover;
+  /* contain: mostra a foto inteira dentro do quadro, sem cortar a mão */
+  object-fit: contain;
+  background-color: #F1F1F3;
   border-radius: 16px;
   border: 2px solid #D5DDF2;
 }
@@ -867,7 +871,9 @@ body {
   width: 100%;
   max-width: 140px;
   height: 160px;
-  object-fit: cover;
+  /* contain: mostra a foto inteira dentro do quadro, sem cortar a mão */
+  object-fit: contain;
+  background-color: #F1F1F3;
   border-radius: 10px;
 }
 
@@ -1015,15 +1021,15 @@ body {
   gap: 6px;
 }
 
-/* object-fit: cover corta a foto para caber no quadro sem distorcer */
 .letra img,
 .letra video {
   width: 100px;
   height: 120px;
-  object-fit: cover;
+  /* contain: mostra a foto inteira dentro do quadro, sem cortar a mão */
+  object-fit: contain;
+  background-color: #F1F1F3;
   border-radius: 12px;
   border: 2px solid #D5DDF2;
-  background-color: var(--branco);
 }
 
 .letra span {
