@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sinalize | Aprenda</title>
+
+    <script src="./js/sinais.js"></script>
+
+    <link rel="stylesheet" href="./css/estilo.css">
+    <link rel="icon" href="./assets/imgs/sinalize-mao.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <a class="marca" href="index.html">
+                <img src="assets/imgs/sinalize-mao.png" alt="Mão fazendo a letra S em Libras">
+                <h1 class="titulo">Sinalize</h1>
+            </a>
+
+            <!-- Menu de quem NÃO fez login: o Aprenda é aberto para qualquer pessoa -->
+            <ul class="navbar" id="ul_visitante">
+                <li>
+                    <a href="index.html">Início</a>
+                </li>
+                <li class="agora">
+                    <a href="aprenda.html">Aprenda</a>
+                </li>
+                <li>
+                    <a href="login.html">Login</a>
+                </li>
+                <li>
+                    <a class="botao-menu" href="cadastro.html">Cadastro</a>
+                </li>
+            </ul>
+
+            <!-- Menu de quem fez login (escondido até o JavaScript confirmar o login) -->
+            <ul class="navbar" id="ul_logado" style="display: none">
+                <li>
+                    <a href="index.html">Início</a>
+                </li>
+                <li class="agora">
+                    <a href="aprenda.html">Aprenda</a>
+                </li>
+                <li>
+                    <a href="quiz.html">Quiz</a>
+                </li>
+                <li>
+                    <a href="dashboard.html">Dashboard</a>
+                </li>
+                <li class="usuario">
+                    <span class="avatar" id="span_inicial"></span>
+                    <span>Olá, <b id="b_usuario"></b></span>
+                </li>
+                <li>
+                    <a class="sair" href="#" onclick="sair()">Sair</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="pagina-quiz">
+        <div class="container">
+
+            <div class="topo-aprenda">
+                <div class="quiz-topo">
+                    <h2 id="h2_titulo"></h2>
+                    <p id="p_subtitulo"></p>
+                </div>
+                <a class="voltar-temas" id="a_voltar" href="aprenda.html" style="display: none">‹ Todos os temas</a>
+            </div>
+
+            <!-- Escolha do tema (quando a página abre sem ?tema= no endereço) -->
+            <div class="escolher-tema" id="div_temas" style="display: none"></div>
+
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <h4>Sinalize &middot; Thiago Prado &middot; SPTech &copy; 2026</h4>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    // 1. O Aprenda é aberto: se a pessoa fez login, troca o menu; se não, mantém o de visitante
+    var nomeUsuario = sessionStorage.NOME_USUARIO;
+
+    if (nomeUsuario != undefined) {
+        ul_visitante.style.display = "none";
+        ul_logado.style.display = "flex";
+        b_usuario.innerHTML = nomeUsuario;
+        span_inicial.innerHTML = nomeUsuario[0].toUpperCase();
+    }
+
+    // 2. Lê o tema que veio no endereço: aprenda.html?tema=alfabeto
+    var parametros = new URLSearchParams(window.location.search);
+    var tema = parametros.get("tema");
+    var dadosTema = temas[tema];   // objeto "temas" do js/sinais.js
+
+    if (dadosTema == undefined) {
+        // Sem tema (ou tema que não existe): mostra os temas para escolher
+        mostrarEscolhaDeTema();
+    } else {
+        h2_titulo.innerHTML = dadosTema.titulo;
+        p_subtitulo.innerHTML = `${dadosTema.sinais.length} ${dadosTema.itens} para estudar.`;
+        a_voltar.style.display = "inline";
+    }
+
+    // Monta um botão para cada tema do objeto "temas" (o mesmo usado no quiz)
+    function mostrarEscolhaDeTema() {
+        h2_titulo.innerHTML = "Aprenda";
+        p_subtitulo.innerHTML = "Escolha um tema para estudar os sinais.";
+
+        var html = "";
+        for (var chave in temas) {
+            var t = temas[chave];
+            html += `<a class="botao-tema-quiz" href="aprenda.html?tema=${chave}">
+                        <strong>${t.titulo}</strong>
+                        <span>${t.sinais.length} ${t.itens}</span>
+                     </a>`;
+        }
+        div_temas.innerHTML = html;
+        div_temas.style.display = "grid";
+    }
+
+    // Apaga os dados do login e volta para a Home como visitante
+    function sair() {
+        sessionStorage.clear();
+        window.location = "index.html";
+    }
+</script>

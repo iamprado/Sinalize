@@ -1081,6 +1081,26 @@ body {
   cursor: pointer;
 }
 
+/* APRENDA: título à esquerda e "Todos os temas" à direita */
+
+.topo-aprenda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+
+.voltar-temas {
+  color: var(--azul);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.voltar-temas:hover {
+  text-decoration: underline;
+}
+
 /* DASHBOARD: faixa marinho com os números do usuário */
 
 .resumo {
