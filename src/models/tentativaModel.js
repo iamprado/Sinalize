@@ -57,9 +57,43 @@ function registrarRespostas(idTentativa, respostas) {
     return database.executar(instrucaoSql);
 }
 
+// Média de acertos (em %) do usuário em cada tema.
+// AVG faz a média das tentativas e GROUP BY separa uma linha por tema.
+function mediaPorTema(idUsuario) {
+    var instrucaoSql = `
+        SELECT tema,
+               ROUND(AVG(acertos / total_perguntas) * 100) AS media
+          FROM tentativa
+         WHERE fk_usuario = ${idUsuario}
+         GROUP BY tema;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+// Os 5 sinais que o usuário mais errou.
+// A tabela resposta não guarda o usuário, então o JOIN busca a tentativa de cada resposta
+// para filtrar pelo fk_usuario. COUNT conta os erros de cada sinal.
+function sinaisMaisErrados(idUsuario) {
+    var instrucaoSql = `
+        SELECT r.sinal, COUNT(*) AS erros
+          FROM resposta r
+          JOIN tentativa t ON r.fk_tentativa = t.id
+         WHERE t.fk_usuario = ${idUsuario}
+           AND r.acertou = 0
+         GROUP BY r.sinal
+         ORDER BY erros DESC
+         LIMIT 5;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     listarPorUsuario,
     listarErrosUltima,
     registrarTentativa,
-    registrarRespostas
+    registrarRespostas,
+    mediaPorTema,
+    sinaisMaisErrados
 };

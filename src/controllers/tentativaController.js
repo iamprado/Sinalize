@@ -65,8 +65,38 @@ function registrar(req, res) {
     }
 }
 
+function mediaPorTema(req, res) {
+    var idUsuario = req.params.idUsuario;
+
+    tentativaModel.mediaPorTema(idUsuario)
+        .then(function (resultado) {
+            res.status(200).json(resultado);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            console.log("Houve um erro ao buscar a média por tema: ", erro.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
+
+function sinaisMaisErrados(req, res) {
+    var idUsuario = req.params.idUsuario;
+
+    tentativaModel.sinaisMaisErrados(idUsuario)
+        .then(function (resultado) {
+            res.status(200).json(resultado);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            console.log("Houve um erro ao buscar os sinais mais errados: ", erro.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
+
 module.exports = {
     listarPorUsuario,
     listarErrosUltima,
-    registrar
+    registrar,
+    mediaPorTema,
+    sinaisMaisErrados
 };
