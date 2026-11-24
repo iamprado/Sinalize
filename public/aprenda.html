@@ -89,6 +89,23 @@
             <h4>Sinalize &middot; Thiago Prado &middot; SPTech &copy; 2026</h4>
         </div>
     </div>
+
+    <!-- Sinal ampliado: fundo escuro por cima da página. Clicar fora da caixa também fecha -->
+    <div class="fundo-ampliado" id="div_ampliado" style="display: none" onclick="if (event.target == this) fecharSinal()">
+        <div class="caixa-ampliada" role="dialog" aria-modal="true" aria-labelledby="h2_nome">
+            <div class="ampliado-topo">
+                <span id="span_posicao"></span>
+                <button class="fechar" onclick="fecharSinal()" aria-label="Fechar">×</button>
+            </div>
+            <div class="midia-ampliada" id="div_midia"></div>
+            <h2 id="h2_nome"></h2>
+            <p class="dica" id="p_dica" style="display: none"></p>
+            <div class="navegar">
+                <button id="btn_anterior" onclick="abrirSinal(aberto - 1)">‹ Anterior</button>
+                <button id="btn_proximo" onclick="abrirSinal(aberto + 1)">Próximo ›</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
@@ -131,12 +148,13 @@
                 etiqueta = `<span class="movimento">com movimento</span>`;
             }
 
+            // O cartão é um botão: ao clicar, abre o sinal ampliado
             html += `
-                <div class="cartao-sinal" id="cartao_${i}">
+                <button class="cartao-sinal" id="cartao_${i}" onclick="abrirSinal(${i})">
                     ${htmlDoSinal(sinais[i])}
                     <span class="nome-sinal">${sinais[i].nome}</span>
                     ${etiqueta}
-                </div>`;
+                </button>`;
         }
 
         div_grade.innerHTML = html;
@@ -159,6 +177,53 @@
         div_temas.innerHTML = html;
         div_temas.style.display = "grid";
     }
+
+    // 4. Sinal ampliado: guarda a posição do sinal aberto no vetor.
+    //    "Anterior" e "Próximo" só somam ou subtraem 1 dessa posição.
+    var aberto = 0;
+
+    function abrirSinal(posicao) {
+        var sinais = dadosTema.sinais;
+        aberto = posicao;
+        var sinal = sinais[aberto];
+
+        span_posicao.innerHTML = `${aberto + 1} de ${sinais.length}`;
+        div_midia.innerHTML = htmlDoSinal(sinal);
+        h2_nome.innerHTML = sinal.nome;
+
+        // A dica é opcional: só aparece se o sinal tiver o campo "dica" no js/sinais.js
+        if (sinal.dica != undefined) {
+            p_dica.innerHTML = `<b>Dica:</b> ${sinal.dica}`;
+            p_dica.style.display = "block";
+        } else {
+            p_dica.style.display = "none";
+        }
+
+        // No primeiro sinal não existe "anterior"; no último não existe "próximo"
+        btn_anterior.disabled = aberto == 0;
+        btn_proximo.disabled = aberto == sinais.length - 1;
+
+        div_ampliado.style.display = "flex";
+    }
+
+    function fecharSinal() {
+        div_ampliado.style.display = "none";
+        div_midia.innerHTML = "";   // para o vídeo de tocar
+    }
+
+    // Teclado: Esc fecha, setas passam para o sinal anterior ou próximo
+    document.addEventListener("keydown", function (evento) {
+        if (div_ampliado.style.display != "flex") {
+            return;
+        }
+        if (evento.key == "Escape") {
+            fecharSinal();
+        } else if (evento.key == "ArrowRight" && btn_proximo.disabled == false) {
+            abrirSinal(aberto + 1);
+        } else if (evento.key == "ArrowLeft" && btn_anterior.disabled == false) {
+            abrirSinal(aberto - 1);
+        }
+    });
 
     // Apaga os dados do login e volta para a Home como visitante
     function sair() {
