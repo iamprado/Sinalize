@@ -46,17 +46,33 @@ var numeros = [
     { nome: "10", arquivo: "assets/sinais/numeros/10.mp4", tipo: "video" }
 ];
 
+var cumprimentos = [
+    { nome: "Oi", arquivo: "assets/sinais/cumprimentos/oi.mp4", tipo: "video" },
+    { nome: "Tchau", arquivo: "assets/sinais/cumprimentos/tchau.mp4", tipo: "video" },
+    { nome: "Bom dia", arquivo: "assets/sinais/cumprimentos/bom-dia.mp4", tipo: "video" },
+    { nome: "Boa tarde", arquivo: "assets/sinais/cumprimentos/boa-tarde.mp4", tipo: "video" },
+    { nome: "Boa noite", arquivo: "assets/sinais/cumprimentos/boa-noite.mp4", tipo: "video" },
+    { nome: "Tudo bem?", arquivo: "assets/sinais/cumprimentos/tudo-bem.mp4", tipo: "video" },
+    { nome: "Obrigado", arquivo: "assets/sinais/cumprimentos/obrigado.mp4", tipo: "video" },
+    { nome: "Por favor", arquivo: "assets/sinais/cumprimentos/por-favor.mp4", tipo: "video" },
+    { nome: "Desculpa", arquivo: "assets/sinais/cumprimentos/desculpa.mp4", tipo: "video" },
+    { nome: "Prazer em conhecer", arquivo: "assets/sinais/cumprimentos/prazer-em-conhecer.mp4", tipo: "video" },
+    { nome: "Nome", arquivo: "assets/sinais/cumprimentos/nome.mp4", tipo: "video" },
+    { nome: "Sinal de nome", arquivo: "assets/sinais/cumprimentos/sinal-de-nome.mp4", tipo: "video" }
+];
+
 // Informações de cada tema: o nome que aparece na tela, o vetor de sinais
 // e como chamar cada item ("letra" no alfabeto, "número" nos números, "sinal" no resto).
 // A chave (alfabeto, numeros...) é o valor que vai no endereço: quiz.html?tema=numeros
 var temas = {
     alfabeto: { titulo: "Alfabeto", sinais: alfabeto, item: "letra", itens: "letras" },
-    numeros: { titulo: "Números", sinais: numeros, item: "número", itens: "números" }
+    numeros: { titulo: "Números", sinais: numeros, item: "número", itens: "números" },
+    cumprimentos: { titulo: "Cumprimentos", sinais: cumprimentos, item: "sinal", itens: "sinais" }
 };
 
 // Procura um sinal pelo nome (ex.: "N" ou "Bom dia") em todos os temas e devolve o objeto dele
 function buscarSinal(nome) {
-    var listaDeTemas = [alfabeto, numeros];
+    var listaDeTemas = [alfabeto, numeros, cumprimentos];
 
     for (var t = 0; t < listaDeTemas.length; t++) {
         var sinais = listaDeTemas[t];
