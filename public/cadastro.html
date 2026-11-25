@@ -82,7 +82,7 @@
         <div class="linha-campos">
           <div class="campo-cadastro">
             <label for="ipt_senha">Senha</label>
-            <input id="ipt_senha" type="password" placeholder="Mínimo de 6 caracteres">
+            <input id="ipt_senha" type="password" placeholder="8 a 20 caracteres">
             <span class="msg-erro" id="erro_senha"></span>
           </div>
           <div class="campo-cadastro">
@@ -142,8 +142,10 @@
       valido = false;
     }
 
-    if (senhaVar.length < 6) {
-      erro_senha.innerHTML = "A senha precisa ter pelo menos 6 caracteres.";
+    // A senha passa pela função validarSenha(), que devolve o que está faltando
+    var faltando = validarSenha(senhaVar);
+    if (faltando.length > 0) {
+      erro_senha.innerHTML = "A senha precisa ter: " + faltando.join(", ") + ".";
       valido = false;
     }
 
@@ -188,6 +190,60 @@
       });
 
     return false;
+  }
+
+  // Confere a senha letra por letra e devolve um vetor com as regras que faltam.
+  // Se o vetor voltar vazio, a senha é forte.
+  function validarSenha(senha) {
+    var temMaiuscula = false;
+    var temMinuscula = false;
+    var temNumero = false;
+    var temEspecial = false;
+    var temEspaco = false;
+
+    var numeros = "0123456789";
+
+    // Passa por cada caractere da senha
+    for (var i = 0; i < senha.length; i++) {
+      var caractere = senha[i];
+
+      if (caractere == " ") {
+        temEspaco = true;
+      } else if (numeros.indexOf(caractere) != -1) {
+        temNumero = true;
+      } else if (caractere >= "A" && caractere <= "Z") {
+        temMaiuscula = true;
+      } else if (caractere >= "a" && caractere <= "z") {
+        temMinuscula = true;
+      } else {
+        // Não é número, nem letra, nem espaço: é um caractere especial (!, @, #, $...)
+        temEspecial = true;
+      }
+    }
+
+    // Monta a lista do que está faltando
+    var faltando = [];
+
+    if (senha.length < 8 || senha.length > 20) {
+      faltando.push("de 8 a 20 caracteres");
+    }
+    if (temMaiuscula == false) {
+      faltando.push("uma letra maiúscula");
+    }
+    if (temMinuscula == false) {
+      faltando.push("uma letra minúscula");
+    }
+    if (temNumero == false) {
+      faltando.push("um número");
+    }
+    if (temEspecial == false) {
+      faltando.push("um caractere especial (!@#$...)");
+    }
+    if (temEspaco) {
+      faltando.push("nenhum espaço");
+    }
+
+    return faltando;
   }
 
   // Mostra a caixa verde (certo) ou vermelha (erro) acima do botão
