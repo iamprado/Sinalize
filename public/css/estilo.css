@@ -376,6 +376,55 @@ body {
   margin: 0;
 }
 
+/* Texto à esquerda e as fotos com meus pais à direita */
+.historia {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 48px;
+  align-items: start;
+}
+
+.historia-fotos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.historia-fotos figure {
+  margin: 0;
+}
+
+.historia-fotos img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+}
+
+.historia-fotos figcaption {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #4C567A;
+  text-align: center;
+}
+
+/* No celular: texto em cima e as duas fotos lado a lado embaixo */
+@media (max-width: 760px) {
+  .historia {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .historia-fotos {
+    flex-direction: row;
+  }
+
+  .historia-fotos figure {
+    flex: 1;
+  }
+}
+
 /* Caixa que explica o que é CODA, com uma faixa azul à esquerda */
 .coda {
   border-left: 4px solid var(--azul);
